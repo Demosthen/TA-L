@@ -16,6 +16,10 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
 
     @Override
     int get_time(Location loc, Location bike_dest) {
+        String origin ="&origins="+loc.x+","+loc.y;
+        String destination = "&destinations="+bike_dest.x+","+bike_dest.y;
+        String mode = "&mode=bicycling";
+        url=
         return from api bike;
     }
 

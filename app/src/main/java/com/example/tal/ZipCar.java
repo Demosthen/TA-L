@@ -1,12 +1,15 @@
 package com.example.tal;
 import java.util.Calendar;
 import java.util.Date;
-
+//FIX THIS AFTER IDK GIGCAR ZIPCAR
 public class GigCar extends Service {
     double d;
+    double rate;
+    double over;
 
     @Override
     double get_cost(Location loc, Location final_dest) {
+
         if (d < 6){
             return d*2.50;
         }

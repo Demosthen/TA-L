@@ -7,12 +7,15 @@ public abstract class Service{
 
     static String name; //name of service
     static String appID; //app ID of service 'com.app_name...'
+    static String url = "http://maps.googleapis.com/maps/api/distancematrix/outputjson?units=imperial"; //google url for distance between locations
+    static String API_key = "&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
     double cost; //cost to get to final destination
     int time; //time to get to final destination in seconds
     int walk; //time to get from user current location to service location in seconds
     Location loc; //Location.x=longitude, Location.y=latitude; Location of Service
     Location my_loc; //Location of me
     Location final_dest; //Location of final destination of service
+
 
     public Service(){
 

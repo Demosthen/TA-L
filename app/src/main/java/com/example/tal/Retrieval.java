@@ -7,7 +7,7 @@ public class Retrieval {
     public static void main(String[] args){
         birds = get_bird()=;
         fords = get_ford();
-        gigcars = get_gigcar();
+        zipcars = get_zipcar();
 
 
     }
@@ -20,7 +20,7 @@ public class Retrieval {
         return arraylist of stufff;
     }
 
-    public static ArrayList<Service> get_gigcar(){
+    public static ArrayList<Service> get_zipcar(){
         return arraylist of stufff;
     }
 }
