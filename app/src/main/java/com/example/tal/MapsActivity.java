@@ -16,6 +16,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +59,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
+        LatLng somewhere = new LatLng(-32, 153);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        ArrayList<Location> locs = new ArrayList<Location>();
+        Location sydny = new Location(-34, 151);
+        Location somwhere = new Location(-32,153);
+        locs.add(sydny);
+        locs.add(somwhere);
+        locs.add(new Location(30, 149));
+        drawLines(locs);
+    }
+
+    public void drawLines(ArrayList<Location> route){
+        PolylineOptions options = new PolylineOptions().clickable(true);
+        for(int i = 0; i< route.size(); i++){
+            Location loc = route.get(i);
+            options.add(new LatLng(loc.x, loc.y));
+        }
+        Polyline polyLine = mMap.addPolyline(options);
+
     }
 
     @Override

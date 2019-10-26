@@ -34,7 +34,8 @@ public abstract class Service{
     abstract ArrayList<Service> extractServices(String json);
 
     int get_walk(Location loc, Location my_loc) {
-        return walking_time;
+        return 5;
+        //return walking_time;
     }
 
 
