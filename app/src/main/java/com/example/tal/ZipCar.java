@@ -2,7 +2,7 @@ package com.example.tal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
+//FIX THIS AFTER IDK GIGCAR ZIPCAR
 public class GigCar extends Service {
     double d;
     public GigCar(Location loc, Location my_loc, Location final_dest){
@@ -11,6 +11,7 @@ public class GigCar extends Service {
     }
     @Override
     double get_cost(Location loc, Location final_dest) {
+
         if (d < 6){
             return d*2.50;
         }
