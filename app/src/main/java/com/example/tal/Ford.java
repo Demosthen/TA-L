@@ -1,5 +1,7 @@
 package com.example.tal;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.ceil;
 
 public class Ford extends Service {//before execute this stuff on Ford, calculate bike_dest
@@ -29,5 +31,8 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-
+    @Override
+    ArrayList<Service> extractServices(String json){
+        return new ArrayList<Service>();
+    }
 }
