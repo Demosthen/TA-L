@@ -31,7 +31,8 @@ public abstract class Service{
     abstract int get_time(Location loc, Location final_dest);
 
     int get_walk(Location loc, Location my_loc) {
-        return walking_time;
+        return 5;
+        //return walking_time;
     }
 
 

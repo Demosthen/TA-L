@@ -12,18 +12,20 @@ public class GigCar extends Service {
             return 15*time/3600;
         }
         else{
-            if (date == Sat/Sun){
+            return 5;
+            /*if (date == Sat/Sun){
                 return 85;
             }
             else{
                 return 69;
-            }
+            }*/
         }
     }
 
     @Override
     int get_time(Location loc, Location final_dest) {
-        d=converted value
-        return duration;
+        //d=converted value
+        //return duration;
+        return 5;
     }
 }
