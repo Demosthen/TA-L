@@ -1,7 +1,9 @@
 package com.example.tal;
 
 public class Bird extends Service {
-
+    public Bird(Location loc, Location my_loc, Location final_dest) {
+        super(loc, my_loc, final_dest);
+    }
     @Override
     double get_cost(Location loc, Location final_dest) {
         return 0;

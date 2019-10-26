@@ -1,7 +1,14 @@
 package com.example.tal;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,10 +17,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<List<Service>>{
 
     private GoogleMap mMap;
-
+    public static String query = "";
+    ArrayList<Service> services = new ArrayList<Service>();
+    ServiceAdapter adapter;
+    private boolean firstQuery = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +35,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        ListView listView=(ListView) findViewById(R.id.list);
+        adapter = new ServiceAdapter(this, services);
+        listView.setAdapter(adapter);
     }
 
 
@@ -43,4 +59,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+    @Override
+    public Loader<List<Service>> onCreateLoader(int id, Bundle args){
+        return new ServeAsyncTaskLoader(this, query);
+    }
+    @Override
+    public void onLoaderReset(Loader<List<Service>> loader) {
+        adapter.clear();
+    }
+
+    @Override
+    public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
+        getLoaderManager().destroyLoader(0);
+        if(data!=null){
+            if(!adapter.isEmpty()){
+                adapter.clear();
+            }
+
+            adapter.addAll(data);
+        }
+        /*if(data.size()==0&&!firstQuery){
+            TextView emptyView= (TextView) findViewById(R.id.emptyView);
+            emptyView.setVisibility(View.VISIBLE);
+        }*/
+
+    }
+
 }

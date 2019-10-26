@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 public abstract class Service{
+
+    static String name; //name of service
+    static String appID; //app ID of service 'com.app_name...'
     double cost; //cost to get to final destination
     int time; //time to get to final destination in seconds
     int walk; //time to get from user current location to service location in seconds
@@ -14,7 +17,7 @@ public abstract class Service{
 
     public Service(Location loc, Location my_loc, Location final_dest){
         this.loc = loc;
-        this.my_loc = my_loc
+        this.my_loc = my_loc;
         this.final_dest = final_dest;
         this.cost = get_cost(loc,final_dest);
         this.time = get_time(loc,final_dest);
