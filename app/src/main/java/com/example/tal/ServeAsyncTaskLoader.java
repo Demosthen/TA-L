@@ -28,6 +28,6 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader<List<Service>> {
         String jsonResponse=Utils.makeHttpRequest(mQuery);
         ArrayList<Service> serviceType = new ArrayList<>();
         ArrayList<ArrayList> result = new ArrayList<>();
-        return new ArrayList<Service>();//Utils.extractDocs(jsonResponse);// TODO: change this line
+        return new Bird(Service.end, Service.start, Service.end).extractServices(jsonResponse);//Utils.extractDocs(jsonResponse);// TODO: change this line
     }
 }
