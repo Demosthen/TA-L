@@ -2,5 +2,7 @@
     <string name="app_name">TA+L</string>
     <string name="title_activity_maps">Map</string>
     <string name ="ORDER">ORDER</string>
-    <string name = "startEditHint">"Please enter your starting point here."</string>
+    <string name = "startHint">"Where would you like to start from?."</string>
+    <string name = "destHint">"Where would you like to go?."</string>
+    <string name = "yourLocation">"Your Location"</string>
 </resources>

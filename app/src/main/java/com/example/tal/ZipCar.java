@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 //FIX THIS AFTER IDK GIGCAR ZIPCAR
-public class GigCar extends Service {
+public class ZipCar extends Service {
     double d;
-    public GigCar(Location loc, Location my_loc, Location final_dest){
+    public ZipCar(Location loc, Location my_loc, Location final_dest){
         super(loc, my_loc, final_dest);
         name = "GigCar";
     }
@@ -25,7 +25,7 @@ public class GigCar extends Service {
             calendar.setTime(now);
             /*day = calendar.get(Calendar.DAY_OF_WEEK);
 
-            if (day == 7 || day == 1){
+            /*if (day == 7 || day == 1){
                 return 85;
             }
             else{
@@ -36,13 +36,14 @@ public class GigCar extends Service {
     }
 
     @Override
+    ArrayList< Service > extractServices(String json){
+        return null; //TODO:need to be changed
+    }
+
+    @Override
     int get_time(Location loc, Location final_dest) {
         //d=converted value
         //return duration;
         return 5;
-    }
-    @Override
-    ArrayList<Service> extractServices(String json){
-        return new ArrayList<Service>();
     }
 }

@@ -35,6 +35,11 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
 
     }
 
+    @Override
+    ArrayList< Service > extractServices(String json){
+        return null; //TODO:need to be changed
+    }
+
     int get_extra_time(Location bike_dest, Location final_dest){
         String origin = "&origins="+bike_dest.x+","+bike_dest.y;
         String destination = "&destinations="+final_dest.x+","+final_dest.y;
@@ -44,22 +49,19 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-    @Override
-    ArrayList<Service> extractServices(String json){
-        return new ArrayList<Service>();
-    }
     int extract_url(String url, String par){
 
         try {
             //magic turns url into json string
+            String json ="";
             JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
             return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
         } catch (JSONException e) {
             Log.i("Oops：Ford error", "Problem parsing json");
+
         }
-
+        return -1;
     }
-
 
 
 }

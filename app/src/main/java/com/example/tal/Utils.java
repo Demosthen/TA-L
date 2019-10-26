@@ -24,9 +24,9 @@ public class Utils {
         }
         return add;
     }
-    private static String addParam(String origLink, String param, String add){
+    private static String addParam(String origLink, String param, String add,String log_tag){
         if(origLink==null||param==null||add==null){
-            Log.i(MapsActivity.LOG_TAG, "problem in addParam");
+            Log.i(log_tag, "problem in addParam");
             return null;
         }
         add=replaceSpace(add);
@@ -38,18 +38,18 @@ public class Utils {
         }
         return origLink;
     }
-    private static URL makeURL(String base_link,String query) {
+    private static URL makeURL(String query, String base_link, String api_key, String log_tag) {
         if(query==null){
-            Log.i(MapsActivity.LOG_TAG, "makeURL received null query");
+            Log.i(log_tag, "makeURL received null query");
             return null;
         }
         try {
-            String base= "";//addParam(base_link, "api-key", MapsActivity.API_KEY);
+            String base= addParam(base_link, "api-key", api_key,log_tag);
 
-            return new URL(addParam(base, "q", query));
+            return new URL(addParam(base, "q", query,log_tag));
         }
         catch(MalformedURLException e){
-            Log.i(MapsActivity.LOG_TAG, "problem making URL");
+            Log.i(log_tag, "problem making URL");
             return null;
         }
     }
@@ -90,13 +90,19 @@ public class Utils {
             }
         }
         catch(JSONException e){
-            Log.i(MainActivity.LOG_TAG, "Problem parsing json");
+            Log.i(MapsActivity.LOG_TAG, "Problem parsing json");
         }
         return docList;
 
     }*/
-    public static String makeHttpRequest(String query){
-        URL link=makeURL("",query);
+    public static String makeHttpRequest(String query, String base_link, String api_key, String log_tag){
+//        URL link=makeURL(query,base_link,api_key,log_tag);
+        URL link = null;
+        try {
+            link = new URL(base_link);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         HttpURLConnection urlConnection=null;
         String jsonResponse=null;
         InputStream stream=null;
@@ -107,18 +113,22 @@ public class Utils {
                 urlConnection.setConnectTimeout(15000);
                 urlConnection.setReadTimeout(10000);
                 urlConnection.setRequestMethod("GET");
+//                urlConnection.setRequestProperty("Authorization","Bird eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBVVRIIiwidXNlcl9pZCI6IjlhNjVkYjRjLTU4NDctNDU1OS05ZDFmLWIzY2Y5Mjg1ODhmNyIsImRldmljZV9pZCI6IjI5M2ZlYzhjLWE2YTUtMTFlOS05YjViLWEwOTk5YjEwNTM1NSIsImV4cCI6MTU5NDY5MjM4OH0.09T6VCGDt-mWz6oYiGawzl0gJa-a4Fq2Y3qaOqVE8nA");
+//                urlConnection.setRequestProperty("Device-id","85d6fcf6-4838-4616-aea0-41fc6381a570");
+//                urlConnection.setRequestProperty("App-Version","4.41.0");
+//                urlConnection.setRequestProperty("Location","{latitude:37.77249,longitude:-122.40910,altitude:500,accuracy:100,speed:-1,heading:-1}");
                 urlConnection.connect();
-                if(urlConnection.getResponseCode()==200){
+                if(urlConnection.getResponseCode()==HttpURLConnection.HTTP_OK){
                     stream=urlConnection.getInputStream();
                     jsonResponse=readFromStream(stream);
 
                 }
                 else{
-                    Log.i(MapsActivity.LOG_TAG,"error code:" + urlConnection.getResponseCode());
+                    Log.i(log_tag,"error code:" + urlConnection.getResponseCode() + "info " + urlConnection.getResponseMessage());
                 }
             }
             catch(IOException e){
-                Log.i(MapsActivity.LOG_TAG, "problem with connection");
+                Log.i(log_tag, "problem with connection");
             }
             finally{
                 if(urlConnection!=null){
@@ -129,7 +139,7 @@ public class Utils {
                         stream.close();
                     }
                     catch(IOException e){
-                        Log.i(MapsActivity.LOG_TAG,"problem with inputStream");
+                        Log.i(log_tag,"problem with inputStream");
                     }
                 }
             }
@@ -137,8 +147,4 @@ public class Utils {
 
         return jsonResponse;
     }
-    /*public static ArrayList<Service> extractServices(String json){
-        ArrayList<Service>
-
-    }*/
 }
