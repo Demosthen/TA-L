@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Austin on 9/6/2017.
@@ -25,7 +26,7 @@ public class Utils {
     }
     private static String addParam(String origLink, String param, String add){
         if(origLink==null||param==null||add==null){
-            Log.i(MainActivity.LOG_TAG, "problem in addParam");
+            Log.i(MapsActivity.LOG_TAG, "problem in addParam");
             return null;
         }
         add=replaceSpace(add);
@@ -39,16 +40,16 @@ public class Utils {
     }
     private static URL makeURL(String base_link,String query) {
         if(query==null){
-            Log.i(MainActivity.LOG_TAG, "makeURL received null query");
+            Log.i(MapsActivity.LOG_TAG, "makeURL received null query");
             return null;
         }
         try {
-            String base= addParam(base_link, "api-key", MainActivity.API_KEY);
+            String base= "";//addParam(base_link, "api-key", MapsActivity.API_KEY);
 
             return new URL(addParam(base, "q", query));
         }
         catch(MalformedURLException e){
-            Log.i(MainActivity.LOG_TAG, "problem making URL");
+            Log.i(MapsActivity.LOG_TAG, "problem making URL");
             return null;
         }
     }
@@ -95,7 +96,7 @@ public class Utils {
 
     }*/
     public static String makeHttpRequest(String query){
-        URL link=makeURL(query);
+        URL link=makeURL("",query);
         HttpURLConnection urlConnection=null;
         String jsonResponse=null;
         InputStream stream=null;
@@ -113,11 +114,11 @@ public class Utils {
 
                 }
                 else{
-                    Log.i(MainActivity.LOG_TAG,"error code:" + urlConnection.getResponseCode());
+                    Log.i(MapsActivity.LOG_TAG,"error code:" + urlConnection.getResponseCode());
                 }
             }
             catch(IOException e){
-                Log.i(MainActivity.LOG_TAG, "problem with connection");
+                Log.i(MapsActivity.LOG_TAG, "problem with connection");
             }
             finally{
                 if(urlConnection!=null){
@@ -128,7 +129,7 @@ public class Utils {
                         stream.close();
                     }
                     catch(IOException e){
-                        Log.i(MainActivity.LOG_TAG,"problem with inputStream");
+                        Log.i(MapsActivity.LOG_TAG,"problem with inputStream");
                     }
                 }
             }
@@ -136,8 +137,8 @@ public class Utils {
 
         return jsonResponse;
     }
-    public static ArrayList<Service> extractServices(String json){
+    /*public static ArrayList<Service> extractServices(String json){
         ArrayList<Service>
 
-    }
+    }*/
 }

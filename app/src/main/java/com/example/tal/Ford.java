@@ -5,9 +5,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import static java.lang.Math.ceil;
 
 public class Ford extends Service {//before execute this stuff on Ford, calculate bike_dest
@@ -46,8 +44,20 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-    ArrayList< Service > extractServices(String json) {
-        return new ArrayList<Service> ();
+    @Override
+    ArrayList<Service> extractServices(String json){
+        return new ArrayList<Service>();
+    }
+    int extract_url(String url, String par){
+
+        try {
+            //magic turns url into json string
+            JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
+            return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
+        } catch (JSONException e) {
+            Log.i("Oops：Ford error", "Problem parsing json");
+        }
+
     }
 
 
