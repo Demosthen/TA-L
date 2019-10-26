@@ -1,5 +1,10 @@
 package com.example.tal;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Dictionary;
 
@@ -35,8 +40,24 @@ public abstract class Service{
     abstract int get_time(Location loc, Location final_dest);
     abstract ArrayList<Service> extractServices(String json);
 
+    int extract_url(String url, String par){
+
+        try {
+            //magic turns url into json string
+            JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
+            return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
+        } catch (JSONException e) {
+            Log.i("google parsing error", "Problem parsing json");
+        }
+
+    }
+
     int get_walk(Location loc, Location my_loc) {
-        return 5;
+        String origin = "&origins="+my_loc.x+","+my_loc.y;
+        String destination = "&destinations="+loc.x+","+loc.y;
+        String mode = "&mode=walking";
+        String new_url = url+origin+destination+mode+API_key;
+        return extract_url(new_url, "duration");
         //return walking_time;
     }
 

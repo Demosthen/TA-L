@@ -21,7 +21,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
             return 3;
         }
         else{
-            return 3+3*Math.ceil((this.time/60-30)/15);
+            return 3+3*Math.ceil((time/60-30)/15);
         }
     }
 
@@ -30,7 +30,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         String origin ="&origins="+loc.x+","+loc.y;
         String destination = "&destinations="+bike_dest.x+","+bike_dest.y;
         String mode = "&mode=bicycling";
-        String new_url = this.url+origin+destination+mode+this.API_key;
+        String new_url = url+origin+destination+mode+API_key;
         return extract_url(new_url, "duration");
 
     }
@@ -39,7 +39,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         String origin = "&origins="+bike_dest.x+","+bike_dest.y;
         String destination = "&destinations="+final_dest.x+","+final_dest.y;
         String mode = "&mode=walking";
-        String new_url = this.url+origin+destination+mode+this.API_key;
+        String new_url = url+origin+destination+mode+API_key;
         return extract_url(new_url, "duration");
         //return walking value;
     }
