@@ -1,8 +1,9 @@
 package com.example.tal;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import android.app.LoaderManager;
+import android.content.Loader;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     public static String query = "";
+    public static String baseLink = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=41.43206,-81.38992|-33.86748,151.20699&destinations=New+York+City,NY&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
+    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
+    public static String logTag = "Bird";
+
     public ArrayList<Service> services = new ArrayList<Service>();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
@@ -41,6 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ListView listView=(ListView) findViewById(R.id.list);
         adapter = new ServiceAdapter(this, services);
         listView.setAdapter(adapter);
+        getLoaderManager().initLoader(0,null, MapsActivity.this);
+
     }
 
 
@@ -83,14 +90,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public Loader<List<Service>> onCreateLoader(int id, Bundle args){
-        return new ServeAsyncTaskLoader(this, query);
+        return new ServeAsyncTaskLoader(this, query,baseLink,apiKey,logTag);
     }
+
+    @Override
+    public void onLoadFinished(Loader< List< Service > > loader, List< Service > services) {
+
+    }
+
     @Override
     public void onLoaderReset(Loader<List<Service>> loader) {
         adapter.clear();
     }
 
-    @Override
+    // @Override
     public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
         getLoaderManager().destroyLoader(0);
         if(data!=null){
