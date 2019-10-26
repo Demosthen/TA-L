@@ -17,6 +17,7 @@ public abstract class Service{
     Location final_dest; //Location of final destination of service
     static Location start = new Location(37,-122); // will be changed
     static Location end = new Location(37.871593,-122.272743); // will be changed
+
     public Service(){
 
     }
