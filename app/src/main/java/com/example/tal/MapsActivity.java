@@ -9,8 +9,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.AutoTransition;
+import android.transition.Scene;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,6 +35,8 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,11 +47,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static String query = "";
     public static String baseLink = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=41.43206,-81.38992|-33.86748,151.20699&destinations=New+York+City,NY&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
     public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
-    public static String logTag = "Bird";
+    public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
     public ArrayList<Service> services = new ArrayList<Service>();
+
+    Transition transition = new AutoTransition();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
+    Place startPlace = null;
+    Place destPlace = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ListView listView=(ListView) findViewById(R.id.list);
         adapter = new ServiceAdapter(this, services);
         listView.setAdapter(adapter);
+        //start loader
         getLoaderManager().initLoader(0,null, MapsActivity.this);
-
 
         // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -75,10 +86,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                TextView startText = findViewById(R.id.start_input);
+                TextView destText = findViewById(R.id.dest_input);
+                //For transitions
+                ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
+                Scene start = Scene.getSceneForLayout(sceneRoot, R.layout.start, getApplicationContext());
+                final Scene no_start = Scene.getSceneForLayout(sceneRoot, R.layout.no_start, getApplicationContext());
+
+                if(destText.getText().length() == 0){
+                    destPlace = place;
+                    Log.i(LOG_TAG, destPlace.getName());
+                    TransitionManager.go(start, transition);
+                    Log.i(LOG_TAG, destPlace.getName());
+                    ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
+                }
+                else{
+                    startPlace = place;
+
+                    startText.setText(startPlace.getName());
+                }
                 // Move camera
                 mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
             }
 
             @Override
@@ -89,7 +120,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
     }
-
 
     /**
      * Manipulates the map once available.
@@ -130,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public Loader<List<Service>> onCreateLoader(int id, Bundle args){
-        return new ServeAsyncTaskLoader(this, query,baseLink,apiKey,logTag);
+        return new ServeAsyncTaskLoader(this, query,baseLink,apiKey,LOG_TAG);
     }
 
     @Override

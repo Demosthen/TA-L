@@ -49,10 +49,6 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-    @Override
-    ArrayList<Service> extractServices(String json){
-        return new ArrayList<Service>();
-    }
     int extract_url(String url, String par){
 
         try {
