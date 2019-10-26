@@ -14,18 +14,25 @@ public abstract class Service{
     Location my_loc; //Location of me
     Location final_dest; //Location of final destination of service
 
+    public Service(){
+
+    }
 
     public Service(Location loc, Location my_loc, Location final_dest){
         this.loc = loc;
         this.my_loc = my_loc;
         this.final_dest = final_dest;
-        this.cost = get_cost(loc,final_dest);
         this.time = get_time(loc,final_dest);
+        this.cost = get_cost(loc,final_dest);
         this.walk = get_walk(loc,my_loc);
     }
 
     abstract double get_cost(Location loc, Location final_dest);
     abstract int get_time(Location loc, Location final_dest);
-    abstract int get_walk(Location loc, Location my_loc);
+
+    int get_walk(Location loc, Location my_loc) {
+        return walking_time;
+    }
+
 
 }
