@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 //FIX THIS AFTER IDK GIGCAR ZIPCAR
-public class GigCar extends Service {
+public class ZipCar extends Service {
     double d;
-    public GigCar(Location loc, Location my_loc, Location final_dest){
+    public ZipCar(Location loc, Location my_loc, Location final_dest){
         super(loc, my_loc, final_dest);
         name = "GigCar";
     }

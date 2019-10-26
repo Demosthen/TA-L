@@ -32,7 +32,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         String mode = "&mode=bicycling";
         String new_url = this.url+origin+destination+mode+this.API_key;
         return extract_url(new_url, "duration");
-\
+
     }
 
     int get_extra_time(Location bike_dest, Location final_dest){
@@ -52,12 +52,14 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
 
         try {
             //magic turns url into json string
+            String json ="";
             JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
             return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
         } catch (JSONException e) {
             Log.i("Oops：Ford error", "Problem parsing json");
-        }
 
+        }
+        return -1;
     }
 
 
