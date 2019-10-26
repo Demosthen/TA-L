@@ -21,12 +21,15 @@ public class Bird extends Service {
 
     @Override
     double get_cost(Location loc, Location final_dest) {
-        return base + this.time * rate;
+        return base + time * rate;
     }
 
     @Override
     int get_time(Location loc, Location final_dest) {
-        double value = 67;
+        String origin = "&origins="+loc.x+","+loc.y;
+        String destination = "&destinations="+final_dest.x+","+final_dest.y;
+        String new_url = url+origin+destination+API_key;
+        double value = extract_url(new_url, "duration");
         return (int) (value * (0.000621371) / speed * (3600 / 5280));
     }
 
