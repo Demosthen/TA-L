@@ -48,17 +48,6 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
     ArrayList<Service> extractServices(String json){
         return new ArrayList<Service>();
     }
-    int extract_url(String url, String par){
-
-        try {
-            //magic turns url into json string
-            JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
-            return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
-        } catch (JSONException e) {
-            Log.i("Oops：Ford error", "Problem parsing json");
-        }
-
-    }
 
 
 
