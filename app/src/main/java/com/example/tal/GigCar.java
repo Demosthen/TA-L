@@ -2,7 +2,10 @@ package com.example.tal;
 
 public class GigCar extends Service {
     double d;
-
+    public GigCar(Location loc, Location my_loc, Location final_dest){
+        super(loc, my_loc, final_dest);
+        name = "GigCar";
+    }
     @Override
     double get_cost(Location loc, Location final_dest) {
         if (d < 6){

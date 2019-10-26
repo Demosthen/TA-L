@@ -24,13 +24,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     public static String query = "";
-    ArrayList<Service> services = new ArrayList<Service>();
+    public ArrayList<Service> services = new ArrayList<Service>();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

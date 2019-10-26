@@ -26,7 +26,8 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader<List<Service>> {
     @Override
     public List<Service> loadInBackground() {
         String jsonResponse=Utils.makeHttpRequest(mQuery);
-
+        ArrayList<Service> serviceType = new ArrayList<>();
+        ArrayList<ArrayList> result = new ArrayList<>();
         return new ArrayList<Service>();//Utils.extractDocs(jsonResponse);// TODO: change this line
     }
 }
