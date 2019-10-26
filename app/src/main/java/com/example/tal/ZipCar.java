@@ -4,9 +4,10 @@ import java.util.Date;
 //FIX THIS AFTER IDK GIGCAR ZIPCAR
 public class GigCar extends Service {
     double d;
-    double rate;
-    double over;
-
+    public GigCar(Location loc, Location my_loc, Location final_dest){
+        super(loc, my_loc, final_dest);
+        name = "GigCar";
+    }
     @Override
     double get_cost(Location loc, Location final_dest) {
 
@@ -34,7 +35,8 @@ public class GigCar extends Service {
 
     @Override
     int get_time(Location loc, Location final_dest) {
-        d=converted value
-        return duration;
+        //d=converted value
+        //return duration;
+        return 5;
     }
 }

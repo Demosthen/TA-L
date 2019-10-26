@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 /**
  * Created by Austin on 9/6/2017.
@@ -36,13 +37,13 @@ public class Utils {
         }
         return origLink;
     }
-    private static URL makeURL(String query) {
+    private static URL makeURL(String base_link,String query) {
         if(query==null){
             Log.i(MainActivity.LOG_TAG, "makeURL received null query");
             return null;
         }
         try {
-            String base= addParam(MainActivity.BASE_LINK, "api-key", MainActivity.API_KEY);
+            String base= addParam(base_link, "api-key", MainActivity.API_KEY);
 
             return new URL(addParam(base, "q", query));
         }
@@ -134,5 +135,9 @@ public class Utils {
         }
 
         return jsonResponse;
+    }
+    public static ArrayList<Service> extractServices(String json){
+        ArrayList<Service>
+
     }
 }

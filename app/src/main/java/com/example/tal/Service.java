@@ -15,8 +15,8 @@ public abstract class Service{
     Location loc; //Location.x=longitude, Location.y=latitude; Location of Service
     Location my_loc; //Location of me
     Location final_dest; //Location of final destination of service
-
-
+    static Location start = new Location(37,-122); // will be changed
+    static Location end = new Location(37.871593,-122.272743); // will be changed
     public Service(){
 
     }
@@ -32,9 +32,11 @@ public abstract class Service{
 
     abstract double get_cost(Location loc, Location final_dest);
     abstract int get_time(Location loc, Location final_dest);
+    abstract ArrayList<Service> extractServices(String json);
 
     int get_walk(Location loc, Location my_loc) {
-        return walking_time;
+        return 5;
+        //return walking_time;
     }
 
 
