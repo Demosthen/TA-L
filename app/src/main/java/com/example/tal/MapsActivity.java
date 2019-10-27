@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.LoaderManager;
 import android.content.Loader;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,6 +31,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -56,11 +60,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public ArrayList<Service> services = new ArrayList<Service>();
     HashMap<String, Boolean> buttons = new HashMap<String, Boolean>();
+    int iconHeight = 125;
+    int iconWidth = 125;
     Transition transition = new AutoTransition();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
     Place startPlace = null;
     Place destPlace = null;
+    BitmapDescriptor smallBikeIcon;
+    BitmapDescriptor smallScooterIcon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,8 +141,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         buttons.put(temp.getText().toString(), false);
         temp = findViewById(R.id.ZipcarButton);
         buttons.put(temp.getText().toString(), false);
+        initializeIcons();
     }
 
+    void initializeIcons(){
+        Bitmap bike = BitmapFactory.decodeResource(getResources(), R.mipmap.bike);
+        Bitmap scooter = BitmapFactory.decodeResource(getResources(), R.mipmap.scooter);
+        Bitmap smallBike = Bitmap.createScaledBitmap(bike, iconWidth, iconHeight, false);
+        Bitmap smallScooter = Bitmap.createScaledBitmap(scooter,iconWidth,iconHeight,false);
+        smallBikeIcon = BitmapDescriptorFactory.fromBitmap(smallBike);
+        smallScooterIcon = BitmapDescriptorFactory.fromBitmap(smallScooter);
+    }
     public void toggle(View v){
         String name = ((ToggleButton) v).getText().toString();
         Log.v(LOG_TAG,name);
@@ -158,7 +175,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         LatLng somewhere = new LatLng(-32, 153);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+
+
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(smallScooterIcon));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         ArrayList<Location> locs = new ArrayList<Location>();
         Location sydny = new Location(-34, 151);
