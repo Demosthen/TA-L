@@ -73,9 +73,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean firstQuery = true;
     Place startPlace = null;
     Place destPlace = null;
-
+    boolean startCalled = false;
+    boolean destCalled = false;
     BitmapDescriptor smallBikeIcon;
     BitmapDescriptor smallScooterIcon;
+    BitmapDescriptor smallBikeParkIcon;
+    BitmapDescriptor smallBikeLAIcon;
     int markerCounter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,32 +113,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         destinationFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                /*TextView startText = findViewById(R.id.start_input);
-                TextView destText = findViewById(R.id.dest_input);
-                //For transitions
-                ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
-                Scene start = Scene.getSceneForLayout(sceneRoot, R.layout.start, getApplicationContext());
-                final Scene no_start = Scene.getSceneForLayout(sceneRoot, R.layout.no_start, getApplicationContext());
 
-                if(destText.getText().length() == 0){
-                    destPlace = place;
-                    Log.i(LOG_TAG, destPlace.getName());
-                    TransitionManager.go(start, transition);
-                    Log.i(LOG_TAG, destPlace.getName());
-                    ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
-                }*/
-                /*else{
-                    startPlace = place;
-
-                    startText.setText(startPlace.getName());
-                }*/
                 // Move camera
                 Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
-                mark.setTag(-markerCounter);//give mark a negative ID to differentiate from service markers
+                mark.setTag(99999+markerCounter);//give mark a negative ID to differentiate from service markers
                 markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 destinationFragment.setText(place.getName());
+                destPlace = place;
+                if(startCalled){
+                    getLoaderManager().initLoader(0, null, MapsActivity.this);
+                }
+                destCalled = true;
+
             }
 
             @Override
@@ -155,33 +146,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                /*TextView startText = findViewById(R.id.start_input);
-                TextView destText = findViewById(R.id.dest_input);
-                //For transitions
-                ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
-                Scene start = Scene.getSceneForLayout(sceneRoot, R.layout.start, getApplicationContext());
-                final Scene no_start = Scene.getSceneForLayout(sceneRoot, R.layout.no_start, getApplicationContext());
 
-                if(destText.getText().length() == 0){
-                    destPlace = place;
-                    Log.i(LOG_TAG, destPlace.getName());
-                    TransitionManager.go(start, transition);
-                    Log.i(LOG_TAG, destPlace.getName());
-                    ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
-                }*/
-                /*else{
-                    startPlace = place;
-
-                    startText.setText(startPlace.getName());
-                }*/
                 // Move camera
-                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
-                mark.setTag(-markerCounter);//give mark a negative ID to differentiate from service markers
+                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Start"));
+                mark.setTag(99999+markerCounter);//give mark a negative ID to differentiate from service markers
                 markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                startPlace = place;
                 startFragment.setText(place.getName());
-                getLoaderManager().initLoader(0, null, MapsActivity.this);
+                if(destCalled){
+                    getLoaderManager().initLoader(0, null, MapsActivity.this);
+                }
+                startCalled = true;
 
             }
 
@@ -235,8 +212,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Bitmap scooter = BitmapFactory.decodeResource(getResources(), R.mipmap.scooter);
         Bitmap smallBike = Bitmap.createScaledBitmap(bike, bikeIconWidth, bikeIconHeight, false);
         Bitmap smallScooter = Bitmap.createScaledBitmap(scooter,scootIconWidth,scootIconHeight,false);
+        Bitmap bikeLA = BitmapFactory.decodeResource(getResources(), R.mipmap.bikelasmart);
+        Bitmap smallBikeLA = Bitmap.createScaledBitmap(bikeLA,bikeIconWidth,bikeIconHeight,false);
+        Bitmap bikePark = BitmapFactory.decodeResource(getResources(), R.mipmap.bikepark);
+        Bitmap smallBikePark = Bitmap.createScaledBitmap(bikePark,scootIconWidth,scootIconHeight,false);
         smallBikeIcon = BitmapDescriptorFactory.fromBitmap(smallBike);
         smallScooterIcon = BitmapDescriptorFactory.fromBitmap(smallScooter);
+        smallBikeLAIcon = BitmapDescriptorFactory.fromBitmap(smallBikeLA);
+        smallBikeParkIcon = BitmapDescriptorFactory.fromBitmap(smallBikePark);
     }
     public void toggle(View v){
         String name = ((ToggleButton) v).getText().toString();
@@ -262,9 +245,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onMarkerClick(Marker marker) {
                 int id = (int) marker.getTag();
                 final Marker mark = marker;
-                if(id >= 0) {// check that it is a service
+                if(id >= 0 && id<99999) {// check that it is a service
                     String name = marker.getTitle();
-                    Service service = services.get(name).get(id);
+                    final Service service = services.get(name).get(id);
                     TextView serviceView = (TextView) findViewById(R.id.service_name);
                     TextView ETAView = (TextView) findViewById(R.id.ETA);
                     TextView EPriceView = (TextView) findViewById(R.id.EP);
@@ -284,33 +267,46 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     });
-                    setButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            LatLng coords = mark.getPosition();
-                            Service.start = new Location(coords.latitude, coords.longitude);
-                        }
-                    });
+                    if(Service.end!=null){
+                        setButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LatLng coords = mark.getPosition();
+
+                                Service.start = new Location(coords.latitude, coords.longitude);
+                                LatLng startCoords = startPlace.getLatLng();
+                                LatLng destCoords = destPlace.getLatLng();
+                                if(mark.getTitle().equals(Bird.name)){
+                                    Bird b = (Bird) service;
+
+                                    b.get_route(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end);
+                                    drawLines(b.route);
+                                }
+                                if(mark.getTitle().equals(Ford.name)){
+                                    Ford b = (Ford) service;
+
+                                    b.get_route(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end,new Location(destCoords.latitude, destCoords.longitude));
+                                    drawLines(b.route);
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        setButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                LatLng coords = mark.getPosition();
+                                Service.start = new Location(coords.latitude, coords.longitude);
+                            }
+                        });
+                    }
+
 
                     return false;
                 }
                 return false;
             }
         });
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        LatLng somewhere = new LatLng(-32, 153);
-
-
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").icon(smallScooterIcon));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        ArrayList<Location> locs = new ArrayList<Location>();
-        Location sydny = new Location(-34, 151);
-        Location somwhere = new Location(-32,153);
-        locs.add(sydny);
-        locs.add(somwhere);
-        locs.add(new Location(30, 149));
-        drawLines(locs);
 
 
     }
@@ -346,6 +342,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                             else if(datum.getKey() == Ford.name){
                                 options.icon(smallBikeIcon);
+                            }
+                            else if(datum.getKey() == Ford_park.name){
+                                options.icon(smallBikeParkIcon);
+                            }
+                            else if(datum.getKey() == BikeLAsmart.name){
+                                options.icon(smallBikeLAIcon);
                             }
                             Marker mark = mMap.addMarker(options);
 

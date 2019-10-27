@@ -15,6 +15,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         super(loc, my_loc, final_dest);
         //this.route = get_route(loc, my_loc, final_dest, bike_dest);
         this.name = name;
+        if(bike_dest!=null && final_dest!=null)
         this.extra_time = get_extra_time(bike_dest,final_dest);
     }
     @Override

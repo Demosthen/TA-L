@@ -36,10 +36,11 @@ public abstract class Service{
         this.loc = loc;
         this.my_loc = my_loc;
         this.final_dest = final_dest;
-        this.time = get_time(loc,final_dest);
-        this.cost = get_cost(loc,final_dest);
-        this.walk = get_walk(loc,my_loc);
-
+        if(loc!=null && my_loc!=null&&final_dest!=null) {
+            this.time = get_time(loc, final_dest);
+            this.cost = get_cost(loc, final_dest);
+            this.walk = get_walk(loc, my_loc);
+        }
 
 
     }
