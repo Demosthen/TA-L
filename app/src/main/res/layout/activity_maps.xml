@@ -16,6 +16,30 @@
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        >
+        <ToggleButton
+            style = "@style/ServiceFilter"
+            android:id = "@+id/BirdButton"
+            android:textOn = "Bird"
+            android:textOff = "Bird"/>
+        <ToggleButton
+            style = "@style/ServiceFilter"
+            android:id = "@+id/FordButton"
+            android:textOn = "Go Bike"
+            android:textOff = "Go Bike"/>
+        <ToggleButton
+            style = "@style/ServiceFilter"
+            android:id = "@+id/ZipcarButton"
+            android:textOn = "Zipcar"
+            android:textOff = "Zipcar"/>
+
+
+
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

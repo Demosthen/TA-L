@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +40,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<List<Service>>{
@@ -50,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
     public ArrayList<Service> services = new ArrayList<Service>();
-
+    HashMap<String, Boolean> buttons = new HashMap<String, Boolean>();
     Transition transition = new AutoTransition();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
@@ -119,6 +121,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        ToggleButton temp = findViewById(R.id.BirdButton);
+        buttons.put(temp.getText().toString(), false);
+        temp = findViewById(R.id.FordButton);
+        buttons.put(temp.getText().toString(), false);
+        temp = findViewById(R.id.ZipcarButton);
+        buttons.put(temp.getText().toString(), false);
+    }
+
+    public void toggle(View v){
+        String name = ((ToggleButton) v).getText().toString();
+        Log.v(LOG_TAG,name);
+        boolean currState = buttons.get(name);
+        buttons.replace(name, !currState);
     }
 
     /**
