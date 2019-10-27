@@ -213,6 +213,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //initialize services Hashmap
         services.put(Bird.name, new ArrayList<Service>());
         services.put(Ford.name, new ArrayList<Service>());
+        services.put(Ford_park.name, new ArrayList<Service>());
+        services.put(BikeLAsmart.name, new ArrayList<Service>());
 
     }
 

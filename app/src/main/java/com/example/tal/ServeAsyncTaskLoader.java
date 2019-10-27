@@ -16,6 +16,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
     private String mQuery;
     private String birdLink = "https://data.lime.bike/api/partners/v1/gbfs/los_angeles/free_bike_status";
     private String bikeShareLink = "https://bikeshare.metro.net/stations/json";
+    private String bikeLAsmartLink = "https://gbfs.bcycle.com/bcycle_lametro/free_bike_status.json";
     private String mApiKey;
     private String mLogTag;
     private HashMap buttons;
@@ -58,13 +59,19 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
             Ford ford = new Ford(Service.start,Service.start,Service.start,Service.end);
             Log.i("json",jsonFordResponse);
             dataRepository.put(ford.name,ford.extractServices(jsonFordResponse));
-
             //create ford_park objects
             String jsonFord_parkResponse = Utils.makeHttpRequest(mQuery,bikeShareLink,mApiKey,mLogTag);
             Ford_park ford_park= new Ford_park(Service.end);
             Log.i("json",jsonFord_parkResponse);
             dataRepository.put(Ford_park.name,ford_park.extractParking(jsonFord_parkResponse));
         }
+        if((boolean)buttons.get("ZipCar")){ //When Go Bike button is initially pressed
+            //create bikeLAsmart objects
+            String bikeLAsmartResponse = Utils.makeHttpRequest(mQuery,bikeLAsmartLink,mApiKey,mLogTag);
+            BikeLAsmart bikelasmart= new BikeLAsmart(Service.start,Service.start,Service.end);
+            Log.i("json",bikeLAsmartResponse);
+            dataRepository.put(BikeLAsmart.name,bikelasmart.extractServices(bikeLAsmartResponse));
+          }
         return dataRepository;
     }
 }

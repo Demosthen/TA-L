@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@color/colorPrimary"
-    android:id= "@+id/service_summary"
-    android:padding = "15dp">
-<RelativeLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center">
-    <TextView
+    android:layout_gravity="center"
+    android:background="@drawable/rounded_corner"
+    android:clipToPadding="false"
+    android:padding="15dp">
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=  "SERVICE_NAME"
-        android:id = "@+id/service_name"
-        android:layout_alignParentTop = "true"
-        android:layout_centerHorizontal= "true"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "ETA"
-        android:id = "@+id/ETA"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/service_name"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "EPrice"
-        android:id = "@+id/EP"
-        android:layout_centerHorizontal="true"
-        android:layout_below= "@id/ETA"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text = "@string/ORDER"
-        android:id = "@+id/order"
-        android:layout_centerHorizontal="true"
-        android:paddingRight="10dp"
-        android:layout_below="@id/EP"
-        />
-</RelativeLayout>
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/service_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="SERVICE_NAME"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/ETA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/service_name"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="ETA" />
+
+        <TextView
+            android:id="@+id/EP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ETA"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:text="EPrice" />
+
+        <Button
+            android:id="@+id/order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/EP"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="10dp"
+            android:text="@string/ORDER"
+            android:corners/>
+    </RelativeLayout>
 </FrameLayout>
