@@ -52,9 +52,9 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
         Bird bird = new Bird(Service.start,Service.start,Service.end);
         Log.i("json",jsonBirdResponse);
         dataRepository.put(bird.name,bird.extractServices(jsonBirdResponse));
-        //create park objects
+        //create ford_park objects
         String jsonFord_parkResponse = Utils.makeHttpRequest(mQuery,bikeShareLink,mApiKey,mLogTag);
-        Ford_park ford_park= new Ford_park(Service.start);
+        Ford_park ford_park= new Ford_park(Service.end);
         Log.i("json",jsonFord_parkResponse);
         dataRepository.put(Ford_park.name,ford_park.extractParking(jsonFord_parkResponse));
 
