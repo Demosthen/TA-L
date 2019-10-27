@@ -18,11 +18,11 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
-        if (this.time<30*60){
-            return 3;
+        if (time<30*60){
+            return 5;
         }
         else{
-            return 3+3*Math.ceil((time/60-30)/15);
+            return 5+1.75*Math.ceil((time-30*60)/30*60);
         }
     }
 

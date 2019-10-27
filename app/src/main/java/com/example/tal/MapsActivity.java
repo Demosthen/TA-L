@@ -24,6 +24,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,7 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     public static String query = "";
-    public static String baseLink = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=41.43206,-81.38992|-33.86748,151.20699&destinations=New+York+City,NY&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
+    public static String baseLink = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
@@ -87,6 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //start loader
         getLoaderManager().initLoader(0,null, MapsActivity.this);
 
+//      RequestQueue queue = Volley.newRequestQueue(this);
+//      queue.add(Utils.makeVolleyQueueRequest("",baseLink,"",""));
 
         // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -127,7 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                Log.i(LOG_TAG, "An error occurred: " + status);
+                Log.i(logTag, "An error occurred: " + status);
             }
         });
 
