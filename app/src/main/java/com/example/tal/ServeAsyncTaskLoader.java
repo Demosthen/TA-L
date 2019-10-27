@@ -50,7 +50,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
 //        for (int i = 0; i < output.size(); i++) {
 //            Log.v("bird",output.get(i).loc+"");
 //        }
-        if((boolean)buttons.get("Bird")){ //When Bird button is initially pressed
+        if((boolean)buttons.get("Lime Scooters")){ //When Bird button is initially pressed
             //creating bird objects
             String jsonBirdResponse = Utils.makeHttpRequest(mQuery,birdLink,mApiKey,mLogTag);
 
@@ -91,7 +91,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
             Log.i("bird_size",birdList.size()+"");
             dataRepository.put(Bird.name,birdList);
         }
-        if((boolean)buttons.get("Go Bike")){ //When Go Bike button is initially pressed
+        if((boolean)buttons.get("Metro Bikes")){ //When Go Bike button is initially pressed
             //creating ford objects
             String jsonFordResponse = Utils.makeHttpRequest(mQuery,bikeShareLink,mApiKey,mLogTag);
             Log.i("json",jsonFordResponse);
@@ -136,7 +136,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
             Log.i("json",jsonFord_parkResponse);
             dataRepository.put(Ford_park.name,ford_park.extractParking(jsonFord_parkResponse));
         }
-        if((boolean)buttons.get("Zipcar")){ //When Go Bike button is initially pressed
+        if((boolean)buttons.get("Smart Bikes")){ //When Go Bike button is initially pressed
             //create bikelasmart objects
             String bikeLAsmartResponse = Utils.makeHttpRequest(mQuery,bikeLAsmartLink,mApiKey,mLogTag);
             Log.i("json",bikeLAsmartResponse);

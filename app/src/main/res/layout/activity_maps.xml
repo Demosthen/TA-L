@@ -33,8 +33,8 @@
             <ToggleButton
                 style = "@style/ServiceFilter"
                 android:id = "@+id/BirdButton"
-                android:textOn = "Bird"
-                android:textOff = "Bird"/>
+                android:textOn = "Lime Scooters"
+                android:textOff = "Lime Scooters"/>
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -43,8 +43,8 @@
             <ToggleButton
                 style = "@style/ServiceFilter"
                 android:id = "@+id/FordButton"
-                android:textOn = "Go Bike"
-                android:textOff = "Go Bike"/>
+                android:textOn = "Metro Bikes"
+                android:textOff = "Metro Bikes"/>
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -53,8 +53,8 @@
             <ToggleButton
                 style = "@style/ServiceFilter"
                 android:id = "@+id/ZipcarButton"
-                android:textOn = "Zipcar"
-                android:textOff = "Zipcar"/>
+                android:textOn = "Smart Bikes"
+                android:textOff = "Smart Bikes"/>
 
         </LinearLayout>
         <fragment
