@@ -23,7 +23,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -205,12 +207,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final FrameLayout summary = findViewById(R.id.service_summary);
         summary.setVisibility(View.GONE);
         summary.setFocusable(true);
+
         summary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
                     summary.setVisibility(View.GONE);
                 }
+            }
+        });
+        summary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                summary.setVisibility(View.GONE);
             }
         });
         //initialize services Hashmap
@@ -263,6 +272,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     ETAView.setText(Integer.toString(service.time+service.walk+service.extra_time));
                     EPriceView.setText("$"+service.cost);
                     summary.setVisibility(View.VISIBLE);
+                    summary.requestFocus();
                     orderButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
