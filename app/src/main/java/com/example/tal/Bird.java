@@ -12,9 +12,8 @@ public class Bird extends Service {
     int speed = 15;
     double base = 1;
     double rate = 0.23 / 60;
-    boolean is_reserved;
-    boolean is_disabled;
     public static String name = "Bird";
+    static double radius = 0.5; // in miles, I think
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
@@ -27,15 +26,14 @@ public class Bird extends Service {
         return base + time * rate;
     }
 
+
     @Override
-    int get_time(Location loc, Location final_dest) {
+    String get_time_url(Location loc, Location final_dest) {
         String origin = "&origins="+loc.x+","+loc.y;
         String destination = "&destinations="+final_dest.x+","+final_dest.y;
-        String new_url = url+origin+destination+API_key;
-        double value = extract_url(new_url, "duration");
-        return (int) (value * (0.000621371) / speed * (3600 / 5280));
+        String new_url = Service.url+origin+destination+API_key;
+        return new_url;
     }
-    private static double radius = 1/4; // in miles, I think
 
     @Override
     ArrayList< Service > extractServices(String json) {
@@ -51,7 +49,8 @@ public class Bird extends Service {
                 String Longitude = jsonBird.getString("lon");
                 Location location = new Location(Double.parseDouble(Latitude),Double.parseDouble(Longitude));
                 if (Location.displacement_between(location, Service.start) < radius && Integer.parseInt(jsonBird.get("is_reserved").toString()) == 0 && Integer.parseInt(jsonBird.get("is_disabled").toString()) == 0) {
-                    birdList.add(new Bird(location, Service.start, Service.end));
+                    Bird bird = new Bird(location, Service.start, Service.end);
+                    birdList.add(bird);
                     Log.i("bird_locations",location + "");
                 }
             }
