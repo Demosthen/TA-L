@@ -34,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -50,14 +51,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<List<Service>>{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<HashMap<String,List<Service>>>{
 
     private GoogleMap mMap;
-    public static String query = "";
-    public static String baseLink = "https://data.lime.bike/api/partners/v1/gbfs/los_angeles/free_bike_status";
-    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
+//    public static String query = "";
+//    public static String baseLink = "https://bikeshare.metro.net/stations/json";
+//    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
     public ArrayList<Service> services = new ArrayList<Service>();
@@ -71,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Place destPlace = null;
     BitmapDescriptor smallBikeIcon;
     BitmapDescriptor smallScooterIcon;
+    int markerCounter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,17 +94,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //      RequestQueue queue = Volley.newRequestQueue(this);
 //      queue.add(Utils.makeVolleyQueueRequest("",baseLink,"",""));
 
-        // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        // Initialize the Destination AutocompleteSupportFragment.
+        final AutocompleteSupportFragment destinationFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.dest_fragment);
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
+        destinationFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        destinationFragment.setHint("Destination");
         // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        destinationFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                TextView startText = findViewById(R.id.start_input);
+                /*TextView startText = findViewById(R.id.start_input);
                 TextView destText = findViewById(R.id.dest_input);
                 //For transitions
                 ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
@@ -117,17 +117,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     TransitionManager.go(start, transition);
                     Log.i(LOG_TAG, destPlace.getName());
                     ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
-                }
-                else{
+                }*/
+                /*else{
                     startPlace = place;
 
                     startText.setText(startPlace.getName());
-                }
+                }*/
                 // Move camera
-                mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                mark.setTag(markerCounter);//give mark an ID
+                markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
-
+                destinationFragment.setText(place.getName());
             }
 
             @Override
@@ -137,13 +139,68 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        // Initialize the Destination AutocompleteSupportFragment.
+        final AutocompleteSupportFragment startFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.start_fragment);
+
+        // Specify the types of place data to return.
+        startFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        startFragment.setHint("Start");
+        // Set up a PlaceSelectionListener to handle the response.
+        startFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                /*TextView startText = findViewById(R.id.start_input);
+                TextView destText = findViewById(R.id.dest_input);
+                //For transitions
+                ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
+                Scene start = Scene.getSceneForLayout(sceneRoot, R.layout.start, getApplicationContext());
+                final Scene no_start = Scene.getSceneForLayout(sceneRoot, R.layout.no_start, getApplicationContext());
+
+                if(destText.getText().length() == 0){
+                    destPlace = place;
+                    Log.i(LOG_TAG, destPlace.getName());
+                    TransitionManager.go(start, transition);
+                    Log.i(LOG_TAG, destPlace.getName());
+                    ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
+                }*/
+                /*else{
+                    startPlace = place;
+
+                    startText.setText(startPlace.getName());
+                }*/
+                // Move camera
+                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                mark.setTag(markerCounter);//give mark an ID
+                markerCounter++;
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                startFragment.setText(place.getName());
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(LOG_TAG, "An error occurred: " + status);
+            }
+        });
+        //initialize buttons
         ToggleButton temp = findViewById(R.id.BirdButton);
         buttons.put(temp.getText().toString(), false);
         temp = findViewById(R.id.FordButton);
         buttons.put(temp.getText().toString(), false);
         temp = findViewById(R.id.ZipcarButton);
         buttons.put(temp.getText().toString(), false);
+        //initialize icons
         initializeIcons();
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                marker.getTag()
+                return false;
+            }
+        });
     }
 
     void initializeIcons(){
@@ -160,7 +217,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         boolean currState = buttons.get(name);
         buttons.replace(name, !currState);
     }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -188,7 +244,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locs.add(somwhere);
         locs.add(new Location(30, 149));
         drawLines(locs);
-        
+
 
     }
 
@@ -203,17 +259,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public Loader<List<Service>> onCreateLoader(int id, Bundle args){
-        return new ServeAsyncTaskLoader(this, query,baseLink,apiKey,LOG_TAG);
+    public Loader< HashMap< String,List<Service> > > onCreateLoader(int id, Bundle args){
+        return new ServeAsyncTaskLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader< List< Service > > loader, List< Service > services) {
+    public void onLoadFinished(Loader< HashMap< String,List<Service> > > loader, HashMap<String, List<Service> > data) {
 
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Service>> loader) {
+    public void onLoaderReset(Loader< HashMap< String,List<Service> > > loader) {
         adapter.clear();
     }
 
@@ -221,17 +277,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
         getLoaderManager().destroyLoader(0);
         if(data!=null){
-            if(!adapter.isEmpty()){
+            if(!adapter.isEmpty()) {
                 adapter.clear();
             }
-
             adapter.addAll(data);
         }
         /*if(data.size()==0&&!firstQuery){
             TextView emptyView= (TextView) findViewById(R.id.emptyView);
             emptyView.setVisibility(View.VISIBLE);
         }*/
-
     }
+
+    @Override
+    public void onLoaderReset(Loader<List<Service>> loader) {
+        adapter.clear();
+    }
+
 
 }

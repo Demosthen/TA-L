@@ -36,11 +36,6 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
 
     }
 
-    @Override
-    ArrayList< Service > extractServices(String json){
-        return null; //TODO:need to be changed
-    }
-
     int get_extra_time(Location bike_dest, Location final_dest){
         String origin = "&origins="+bike_dest.x+","+bike_dest.y;
         String destination = "&destinations="+final_dest.x+","+final_dest.y;
@@ -63,7 +58,32 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         }
         return route;
     }
+    private static double radius = 1; // in miles, I think
 
+    @Override
+    ArrayList<Service> extractServices(String json) {
+        ArrayList<Service> bikeshare_list = new ArrayList<Service>();
+        try {
+//            ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
+            JSONObject baseJSON = new JSONObject(json);
+            JSONArray stations = baseJSON.getJSONArray("features");
+            for (int i=0; i<stations.length(); i++) {
+                JSONObject st = stations.getJSONObject(i).getJSONObject("properties");
+                if (st.getInt("bikesAvailable") > 0) {
+                    Location st_loc  = new Location(st.getDouble("latitude"), st.getDouble("longitude"));
+                    if (Location.displacement_between(st_loc, Service.start) < radius) {
+                        bikeshare_list.add(new Ford(st_loc, Service.start, Service.end, Service.end));
+                        Log.i("ford_locations",st_loc + "");
+                    }
+                }
+
+            }
+        } catch (JSONException e) {
+            Log.i("Oops gbfs_maker", "Problem parsing json");
+        }
+        Log.i("ford_size",bikeshare_list.size() + "");
+        return bikeshare_list;
+    }
 
 
 }

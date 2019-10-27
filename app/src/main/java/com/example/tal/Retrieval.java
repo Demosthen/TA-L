@@ -25,11 +25,10 @@ public class Retrieval {
 
     public static double radius = 1; // in miles, I think
 
-    public static ArrayList<Service> get_bikeshare() {
+    public static ArrayList<Service> get_bikeshare(String json) {
         ArrayList<Service> bikeshare_list = new ArrayList<Service>();
 
         try {
-            String json = ""; //Jeffery give me a thing
             ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
             JSONObject baseJSON = new JSONObject(json);
             JSONArray stations = baseJSON.getJSONArray("features");
@@ -38,9 +37,11 @@ public class Retrieval {
                 if (st.getInt("bikesAvailable") > 0) {
                     Location st_loc  = new Location(st.getDouble("latitude"), st.getDouble("longitude"));
                     if (Location.displacement_between(st_loc, Service.start) < radius) {
-                        for (int j=0; j<possible_destinations.size(); j++) {
-                            bikeshare_list.add(new Ford(st_loc, Service.start, Service.end, possible_destinations.get(j)));
-                        }
+//                        for (int j=0; j<possible_destinations.size(); j++) {
+//                            bikeshare_list.add(new Ford(st_loc, Service.start, Service.end, possible_destinations.get(j)));
+//                        }
+                        bikeshare_list.add(new Ford(st_loc, Service.start, Service.end, Service.end));
+                        //fix this so that the end works
                     }
                 }
 

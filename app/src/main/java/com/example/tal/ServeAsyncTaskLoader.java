@@ -4,24 +4,27 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.AsyncTaskLoader;
 
 import static com.example.tal.MapsActivity.LOG_TAG;
 
-public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
+public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<Service> > > {
     private String mQuery;
-    private String mBaseLink;
+    private String birdLink = "https://data.lime.bike/api/partners/v1/gbfs/los_angeles/free_bike_status";
+    private String bikeShareLink = "https://bikeshare.metro.net/stations/json";
     private String mApiKey;
     private String mLogTag;
+    private HashMap dataRepository = new HashMap();
 
-    public ServeAsyncTaskLoader(Context context, String query, String base_link, String api_key, String log_tag) {
+    public ServeAsyncTaskLoader(Context context) {
         super(context);
-        mQuery = query;
-        mBaseLink = base_link;
-        mApiKey = api_key;
-        mLogTag = log_tag;
+//        mQuery = query;
+//        mBaseLink = base_link;
+//        mApiKey = api_key;
+//        mLogTag = log_tag;
     }
 
     @Override
@@ -32,19 +35,24 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
     }
 
     @Override
-    public List< Service > loadInBackground() {
-        String jsonResponse = Utils.makeHttpRequest(mQuery,mBaseLink,mApiKey,mLogTag);
+    public HashMap< String,List<Service> > loadInBackground() {
 //        ArrayList< Service > serviceType = new ArrayList<>();
 //        ArrayList< ArrayList > result = new ArrayList<>();
 //        ArrayList<Service> output = new Bird(Service.start,Service.start,Service.end).extractServices(jsonResponse);
 //        for (int i = 0; i < output.size(); i++) {
 //            Log.v("bird",output.get(i).loc+"");
 //        }
+        //creating ford objects
+        String jsonFordResponse = Utils.makeHttpRequest(mQuery,bikeShareLink,mApiKey,mLogTag);
+        Ford ford = new Ford(Service.start,Service.start,Service.start,Service.end);
+        Log.i("json",jsonFordResponse);
+        dataRepository.put(ford.name,ford.extractServices(jsonFordResponse));
+        //creating bird objects
+        String jsonBirdResponse = Utils.makeHttpRequest(mQuery,birdLink,mApiKey,mLogTag);
+        Bird bird = new Bird(Service.start,Service.start,Service.end);
+        Log.i("json",jsonBirdResponse);
+        dataRepository.put(bird.name,bird.extractServices(jsonBirdResponse));
 
-        ArrayList<Service> output = new ArrayList<>();
-        Bird test = new Bird(Service.start,Service.start,Service.end);
-        Log.i("json",jsonResponse);
-        output = test.extractServices(jsonResponse);
-        return output;
+        return dataRepository;
     }
 }

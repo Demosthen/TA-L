@@ -34,10 +34,11 @@ public class Bird extends Service {
         double value = extract_url(new_url, "duration");
         return (int) (value * (0.000621371) / speed * (3600 / 5280));
     }
+    private static double radius = 1; // in miles, I think
 
     @Override
     ArrayList< Service > extractServices(String json) {
-        ArrayList< Service > docList = new ArrayList<>();
+        ArrayList< Service > birdList = new ArrayList<>();
         try {
             JSONObject baseJson = new JSONObject(json);
             JSONObject data = baseJson.getJSONObject("data");
@@ -48,16 +49,16 @@ public class Bird extends Service {
                 String Latitude = jsonBird.getString("lat");
                 String Longitude = jsonBird.getString("lon");
                 Location location = new Location(Double.parseDouble(Latitude),Double.parseDouble(Longitude));
-                Bird bird = new Bird(location, Service.start, Service.end);
-                bird.is_reserved = Integer.parseInt(jsonBird.get("is_reserved").toString()) == 1;
-                bird.is_disabled = Integer.parseInt(jsonBird.get("is_disabled").toString()) == 1;
-                docList.add(bird);
+                if (Location.displacement_between(location, Service.start) < radius && Integer.parseInt(jsonBird.get("is_reserved").toString()) == 0 && Integer.parseInt(jsonBird.get("is_disabled").toString()) == 0) {
+                    birdList.add(new Bird(location, Service.start, Service.end));
+                    Log.i("bird_locations",location + "");
+                }
             }
         } catch (JSONException e) {
             Log.i(Bird.name, "Problem parsing json");
         }
-        Log.i("length",docList.size()+"");
-        return docList;
+        Log.i("bird_size",birdList.size()+"");
+        return birdList;
     }
 
     ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest){
