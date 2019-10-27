@@ -51,6 +51,8 @@ public abstract class Service{
         try {
             //magic turns url into json string
             JSONObject baseJson = new JSONObject(); //go to row, elements, par, value
+            String json = "";
+            JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
             return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
         } catch (JSONException e) {
             Log.i("google parsing error", "Problem parsing json");
