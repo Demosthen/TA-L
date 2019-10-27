@@ -24,7 +24,9 @@ public abstract class Service{
     public Location final_dest; //Location of final destination of service
     public static Location start = new Location(34.053740, -118.242643); // will be changed
     public static Location end = new Location(34.068742, -118.444807); // will be changed
+    public static int extra_time = 0;
     public ArrayList <Location> route;
+
 
     public Service(){
 
@@ -37,6 +39,7 @@ public abstract class Service{
         this.time = get_time(loc,final_dest);
         this.cost = get_cost(loc,final_dest);
         this.walk = get_walk(loc,my_loc);
+
 
 
     }
@@ -57,7 +60,7 @@ public abstract class Service{
         } catch (JSONException e) {
             Log.i("google parsing error", "Problem parsing json");
         }
-        return 5;
+        return -1;
     }
 
     int get_walk(Location loc, Location my_loc) {
