@@ -58,9 +58,6 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<HashMap<String,List<Service>>>{
 
     private GoogleMap mMap;
-//    public static String query = "";
-//    public static String baseLink = "https://bikeshare.metro.net/stations/json";
-//    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
     public HashMap< String, List<Service> > services = new HashMap<String, List<Service>>();
@@ -182,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 startFragment.setText(place.getName());
-                getLoaderManager().initLoader(0,null, MapsActivity.this);
+                getLoaderManager().initLoader(0, null, MapsActivity.this);
 
             }
 
@@ -194,20 +191,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         //initialize buttons
         ToggleButton temp = findViewById(R.id.BirdButton);
-        buttons.put(temp.getText().toString(), false);
+        buttons.put(temp.getText().toString(), true);
+        Log.i("buttons",temp.getText().toString());
         temp = findViewById(R.id.FordButton);
-        buttons.put(temp.getText().toString(), false);
+        buttons.put(temp.getText().toString(), true);
+        Log.i("buttons",temp.getText().toString());
         temp = findViewById(R.id.ZipcarButton);
-        buttons.put(temp.getText().toString(), false);
+        buttons.put(temp.getText().toString(), true);
+        Log.i("buttons",temp.getText().toString());
         //initialize icons
         initializeIcons();
         //initialize service summary
         final FrameLayout summary = findViewById(R.id.service_summary);
         summary.setVisibility(View.GONE);
+        summary.setFocusable(true);
         summary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                summary.setVisibility(View.GONE);
+                if(!hasFocus) {
+                    summary.setVisibility(View.GONE);
+                }
             }
         });
         //initialize services Hashmap
@@ -257,7 +260,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     TextView EPriceView = (TextView) findViewById(R.id.EP);
                     Button orderButton = (Button) findViewById(R.id.order);
                     serviceView.setText(name);
-                    ETAView.setText(Integer.toString(service.time));
+                    ETAView.setText(Integer.toString(service.time+service.walk+service.extra_time));
                     EPriceView.setText(Double.toString(service.cost));
                     summary.setVisibility(View.VISIBLE);
                     orderButton.setOnClickListener(new View.OnClickListener() {
@@ -269,6 +272,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     });
+
                     return false;
                 }
                 return false;
@@ -304,7 +308,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public Loader< HashMap< String,List<Service> > > onCreateLoader(int id, Bundle args){
-        return new ServeAsyncTaskLoader(this);
+        return new ServeAsyncTaskLoader(this, buttons);
     }
 
     @Override
