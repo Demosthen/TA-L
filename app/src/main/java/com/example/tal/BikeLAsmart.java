@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class BikeLAsmart extends Service {
-    public static String name = "BikeLAsmart";
+    public static String name = "bikelasmart";
 
     public BikeLAsmart(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
@@ -35,7 +35,7 @@ public class BikeLAsmart extends Service {
         return extract_url(new_url, "duration");
     }
 
-    private static double radius = 1/4; // in miles, I think
+    private static double radius = 0.5; // in miles, I think
 
     @Override
     ArrayList< Service > extractServices(String json) {

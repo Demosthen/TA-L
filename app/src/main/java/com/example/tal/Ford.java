@@ -59,7 +59,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         }
         return route;
     }
-    private static double radius = 1/4; // in miles, I think
+    private static double radius = 0.5; // in miles, I think
 
     @Override
     ArrayList<Service> extractServices(String json) {

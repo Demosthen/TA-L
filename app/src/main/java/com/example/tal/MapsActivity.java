@@ -261,6 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 int id = (int) marker.getTag();
+                final Marker mark = marker;
                 if(id >= 0) {// check that it is a service
                     String name = marker.getTitle();
                     Service service = services.get(name).get(id);
@@ -268,6 +269,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     TextView ETAView = (TextView) findViewById(R.id.ETA);
                     TextView EPriceView = (TextView) findViewById(R.id.EP);
                     Button orderButton = (Button) findViewById(R.id.order);
+                    Button setButton = (Button) findViewById(R.id.setStart);
                     serviceView.setText(name);
                     ETAView.setText(Integer.toString(service.time+service.walk+service.extra_time));
                     EPriceView.setText(Double.toString(service.cost));
@@ -280,6 +282,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             if (launchIntent != null) {
                                 startActivity(launchIntent);//null pointer check in case package name was not found
                             }
+                        }
+                    });
+                    setButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            LatLng coords = mark.getPosition();
+                            Service.start = new Location(coords.latitude, coords.longitude);
                         }
                     });
 
