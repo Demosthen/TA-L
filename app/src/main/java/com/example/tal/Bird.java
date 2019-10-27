@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Bird extends Service {
-    int speed = 15;
+    double speed = 15.0;
     double base = 1;
     double rate = 0.23 / 60;
     public static String name = "Bird";
