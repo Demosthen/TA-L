@@ -29,7 +29,7 @@ public class Retrieval {
         ArrayList<Service> bikeshare_list = new ArrayList<Service>();
 
         try {
-            ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
+            //ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
             JSONObject baseJSON = new JSONObject(json);
             JSONArray stations = baseJSON.getJSONArray("features");
             for (int i=0; i<stations.length(); i++) {
