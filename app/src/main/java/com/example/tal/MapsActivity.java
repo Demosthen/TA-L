@@ -34,6 +34,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -69,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Place destPlace = null;
     BitmapDescriptor smallBikeIcon;
     BitmapDescriptor smallScooterIcon;
+    int markerCounter = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Specify the types of place data to return.
         destinationFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        destinationFragment.setText("Destination");
+        destinationFragment.setHint("Destination");
         // Set up a PlaceSelectionListener to handle the response.
         destinationFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -122,7 +124,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     startText.setText(startPlace.getName());
                 }*/
                 // Move camera
-                mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                mark.setTag(markerCounter);//give mark an ID
+                markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 destinationFragment.setText(place.getName());
@@ -140,7 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Specify the types of place data to return.
         startFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        startFragment.setText("Start");
+        startFragment.setHint("Start");
         // Set up a PlaceSelectionListener to handle the response.
         startFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -165,7 +169,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     startText.setText(startPlace.getName());
                 }*/
                 // Move camera
-                mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                mark.setTag(markerCounter);//give mark an ID
+                markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 startFragment.setText(place.getName());
@@ -178,14 +184,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.i(LOG_TAG, "An error occurred: " + status);
             }
         });
-
+        //initialize buttons
         ToggleButton temp = findViewById(R.id.BirdButton);
         buttons.put(temp.getText().toString(), false);
         temp = findViewById(R.id.FordButton);
         buttons.put(temp.getText().toString(), false);
         temp = findViewById(R.id.ZipcarButton);
         buttons.put(temp.getText().toString(), false);
+        //initialize icons
         initializeIcons();
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                marker.getTag()
+                return false;
+            }
+        });
     }
 
     void initializeIcons(){
@@ -202,7 +217,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         boolean currState = buttons.get(name);
         buttons.replace(name, !currState);
     }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
