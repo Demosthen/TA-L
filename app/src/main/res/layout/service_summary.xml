@@ -3,8 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:id = "@+id/service_summary"
-    android:background="#B903A9F4"
+    android:background="@drawable/rounded_corner"
+    android:clipToPadding="false"
     android:padding="15dp">
 
     <RelativeLayout
@@ -21,7 +21,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
-            android:text="SERVICE_NAME" />
+            android:text="SERVICE_NAME"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <TextView
             android:id="@+id/ETA"
@@ -51,6 +52,7 @@
             android:layout_below="@id/EP"
             android:layout_centerHorizontal="true"
             android:paddingRight="10dp"
-            android:text="@string/ORDER" />
+            android:text="@string/ORDER"
+            android:corners/>
     </RelativeLayout>
 </FrameLayout>
