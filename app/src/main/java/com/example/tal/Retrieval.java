@@ -29,7 +29,6 @@ public class Retrieval {
         ArrayList<Service> ford_list = new ArrayList<Service>();
         String json ="";
         try {
-            String json = "";
             JSONObject baseJson = new JSONObject(json); //magically get it from the file somehow
             JSONArray station_list = baseJson.getJSONArray("stationBeanList");
             JSONArray jsonBirds = new JSONArray();
