@@ -14,11 +14,12 @@ public class Bird extends Service {
     double rate = 0.23 / 60;
     boolean is_reserved;
     boolean is_disabled;
+    public static String name = "Bird";
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
-        this.name = "Bird";
-        this.route = get_route(loc, my_loc, final_dest);
+        //this.route = get_route(loc, my_loc, final_dest);
+        this.name = name;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.tal;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 
 import android.graphics.Bitmap;
@@ -19,7 +20,9 @@ import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -46,6 +49,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,15 +63,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
-    public ArrayList<Service> services = new ArrayList<Service>();
+    public HashMap< String, List<Service> > services = new HashMap<String, List<Service>>();
     HashMap<String, Boolean> buttons = new HashMap<String, Boolean>();
-    int iconHeight = 125;
-    int iconWidth = 125;
+    int bikeIconHeight = 125;
+    int bikeIconWidth = 125;
+    int scootIconWidth = 75;
+    int scootIconHeight = 75;
     Transition transition = new AutoTransition();
     ServiceAdapter adapter;
     private boolean firstQuery = true;
     Place startPlace = null;
     Place destPlace = null;
+
     BitmapDescriptor smallBikeIcon;
     BitmapDescriptor smallScooterIcon;
     int markerCounter = 0;
@@ -86,10 +93,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         //initialize ListView for available services and attach adapter
         ListView listView=(ListView) findViewById(R.id.list);
-        adapter = new ServiceAdapter(this, services);
-        listView.setAdapter(adapter);
+        //adapter = new ServiceAdapter(this, services);
+        //listView.setAdapter(adapter);
         //start loader
-        getLoaderManager().initLoader(0,null, MapsActivity.this);
+
 
 //      RequestQueue queue = Volley.newRequestQueue(this);
 //      queue.add(Utils.makeVolleyQueueRequest("",baseLink,"",""));
@@ -125,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }*/
                 // Move camera
                 Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
-                mark.setTag(markerCounter);//give mark an ID
+                mark.setTag(-markerCounter);//give mark a negative ID to differentiate from service markers
                 markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
@@ -170,11 +177,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }*/
                 // Move camera
                 Marker mark = mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
-                mark.setTag(markerCounter);//give mark an ID
+                mark.setTag(-markerCounter);//give mark a negative ID to differentiate from service markers
                 markerCounter++;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 startFragment.setText(place.getName());
+                getLoaderManager().initLoader(0,null, MapsActivity.this);
 
             }
 
@@ -193,21 +201,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         buttons.put(temp.getText().toString(), false);
         //initialize icons
         initializeIcons();
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+        //initialize service summary
+        final FrameLayout summary = findViewById(R.id.service_summary);
+        summary.setVisibility(View.GONE);
+        summary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                marker.getTag()
-                return false;
+            public void onFocusChange(View v, boolean hasFocus) {
+                summary.setVisibility(View.GONE);
             }
         });
+        //initialize services Hashmap
+        services.put(Bird.name, new ArrayList<Service>());
+        services.put(Ford.name, new ArrayList<Service>());
+
     }
 
     void initializeIcons(){
         Bitmap bike = BitmapFactory.decodeResource(getResources(), R.mipmap.bike);
         Bitmap scooter = BitmapFactory.decodeResource(getResources(), R.mipmap.scooter);
-        Bitmap smallBike = Bitmap.createScaledBitmap(bike, iconWidth, iconHeight, false);
-        Bitmap smallScooter = Bitmap.createScaledBitmap(scooter,iconWidth,iconHeight,false);
+        Bitmap smallBike = Bitmap.createScaledBitmap(bike, bikeIconWidth, bikeIconHeight, false);
+        Bitmap smallScooter = Bitmap.createScaledBitmap(scooter,scootIconWidth,scootIconHeight,false);
         smallBikeIcon = BitmapDescriptorFactory.fromBitmap(smallBike);
         smallScooterIcon = BitmapDescriptorFactory.fromBitmap(smallScooter);
     }
@@ -229,7 +242,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        final FrameLayout summary = findViewById(R.id.service_summary);
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int id = (int) marker.getTag();
+                if(id >= 0) {// check that it is a service
+                    String name = marker.getTitle();
+                    Service service = services.get(name).get(id);
+                    TextView serviceView = (TextView) findViewById(R.id.service_name);
+                    TextView ETAView = (TextView) findViewById(R.id.ETA);
+                    TextView EPriceView = (TextView) findViewById(R.id.EP);
+                    Button orderButton = (Button) findViewById(R.id.order);
+                    serviceView.setText(name);
+                    ETAView.setText(Integer.toString(service.time));
+                    EPriceView.setText(Double.toString(service.cost));
+                    summary.setVisibility(View.VISIBLE);
+                    orderButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(Service.appID);
+                            if (launchIntent != null) {
+                                startActivity(launchIntent);//null pointer check in case package name was not found
+                            }
+                        }
+                    });
+                    return false;
+                }
+                return false;
+            }
+        });
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         LatLng somewhere = new LatLng(-32, 153);
@@ -263,7 +305,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onLoadFinished(Loader< HashMap< String,List<Service> > > loader, HashMap<String, List<Service> > data) {
+        getLoaderManager().destroyLoader(0);
+        Log.v(LOG_TAG, "FINALLY FINISHED LOADING DATA");
+        if(data!=null){
+            for(HashMap.Entry<String, List<Service> > datum : data.entrySet()){
+                ArrayList<Service> datumList = (ArrayList) datum.getValue();
+                for(Service service : datumList){
+                    if(service != null){
+                        try{
+                            MarkerOptions options = new MarkerOptions().position(new LatLng(service.loc.x, service.loc.y)).title(datum.getKey());
+                            if(datum.getKey() == Bird.name){
+                                options.icon(smallScooterIcon);
+                            }
+                            else if(datum.getKey() == Ford.name){
+                                options.icon(smallBikeIcon);
+                            }
+                            Marker mark = mMap.addMarker(options);
 
+                            mark.setTag(services.get(datum.getKey()).size());//give mark an ID
+                            services.get(datum.getKey()).add(service);
+                        } catch (NullPointerException n) {
+                            try {
+                                Log.e(LOG_TAG, datum.getKey());
+                            }
+                            catch(NullPointerException e){
+                                Log.e(LOG_TAG, datumList.toString());
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
     }
 
     @Override
@@ -273,23 +347,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // @Override
     public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
-        getLoaderManager().destroyLoader(0);
-        if(data!=null){
-            if(!adapter.isEmpty()) {
-                adapter.clear();
-            }
-            adapter.addAll(data);
-        }
+
         /*if(data.size()==0&&!firstQuery){
             TextView emptyView= (TextView) findViewById(R.id.emptyView);
             emptyView.setVisibility(View.VISIBLE);
         }*/
     }
 
-    @Override
-    public void onLoaderReset(Loader<List<Service>> loader) {
-        adapter.clear();
-    }
 
 
 }

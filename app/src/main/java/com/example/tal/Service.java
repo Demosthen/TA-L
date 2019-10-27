@@ -11,20 +11,20 @@ import java.util.Dictionary;
 
 public abstract class Service{
 
-    static String name; //name of service
-    static String appID; //app ID of service 'com.app_name...'
+    public static String name; //name of service
+    public static String appID; //app ID of service 'com.app_name...'
     static String url = "http://maps.googleapis.com/maps/api/distancematrix/outputjson?units=imperial"; //google url for distance between locations
     static String route_url = "https://maps.googleapis.com/maps/api/directions/json?";
     static String API_key = "&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
-    double cost; //cost to get to final destination
-    int time; //time to get to final destination in seconds
-    int walk; //time to get from user current location to service location in seconds
-    Location loc; //Location.x=longitude, Location.y=latitude; Location of Service
-    Location my_loc; //Location of me
-    Location final_dest; //Location of final destination of service
-    static Location start = new Location(34.053740, -118.242643); // will be changed
-    static Location end = new Location(34.068742, -118.444807); // will be changed
-    ArrayList <Location> route;
+    public double cost; //cost to get to final destination
+    public int time; //time to get to final destination in seconds
+    public int walk; //time to get from user current location to service location in seconds
+    public Location loc; //Location.x=longitude, Location.y=latitude; Location of Service
+    public Location my_loc; //Location of me
+    public Location final_dest; //Location of final destination of service
+    public static Location start = new Location(34.053740, -118.242643); // will be changed
+    public static Location end = new Location(34.068742, -118.444807); // will be changed
+    public ArrayList <Location> route;
 
     public Service(){
 
