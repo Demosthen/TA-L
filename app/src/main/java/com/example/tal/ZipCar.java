@@ -33,7 +33,6 @@ public class ZipCar extends Service {
             }*/
             return 5;
         }
-        return 5;
     }
 
     @Override
@@ -47,8 +46,5 @@ public class ZipCar extends Service {
         //return duration;
         return 5;
     }
-    @Override
-    ArrayList<Service> extractServices(String json){
-        return new ArrayList<Service>();
-    }
+
 }
