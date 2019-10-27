@@ -18,13 +18,13 @@
             android:id="@+id/service_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:text="SERVICE_NAME"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/ETA"
@@ -35,7 +35,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:text="ETA" />
+            android:text="ETA"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/EP"
@@ -45,7 +46,8 @@
             android:layout_centerHorizontal="true"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
-            android:text="EPrice" />
+            android:text="EPrice"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/order"
