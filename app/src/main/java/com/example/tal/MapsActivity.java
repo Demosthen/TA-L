@@ -261,7 +261,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Button orderButton = (Button) findViewById(R.id.order);
                     serviceView.setText(name);
                     ETAView.setText(Integer.toString(service.time+service.walk+service.extra_time));
-                    EPriceView.setText(Double.toString(service.cost));
+                    EPriceView.setText("$"+service.cost);
                     summary.setVisibility(View.VISIBLE);
                     orderButton.setOnClickListener(new View.OnClickListener() {
                         @Override
