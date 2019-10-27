@@ -286,6 +286,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locs.add(somwhere);
         locs.add(new Location(30, 149));
         drawLines(locs);
+
+
     }
 
     public void drawLines(ArrayList<Location> route){

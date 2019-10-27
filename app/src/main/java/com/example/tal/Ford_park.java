@@ -17,7 +17,7 @@ public class Ford_park extends Service_park {
 
     public static double radius = 2; //remove if needed to ensure a station
 
-    public static ArrayList<Location> extractParking(String json, Location d) {
+    public static ArrayList<Location> extractParking(String json) {
         ArrayList<Location> park_list = new ArrayList<>();
         try {
             JSONObject baseJSON = new JSONObject(json);
@@ -25,7 +25,7 @@ public class Ford_park extends Service_park {
             for (int i = 0; i<stations.length(); i++) {
                 JSONObject s = stations.getJSONObject(i);
                 Location s_loc = new Location(s.getDouble("lat"), s.getDouble("lon"));
-                if (Location.displacement_between(s_loc, Service.start) < radius) {
+                if (Location.displacement_between(s_loc, Service.end) < radius) {
                     park_list.add(s_loc);
                 }
             }
