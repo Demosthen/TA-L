@@ -23,6 +23,8 @@ public class Retrieval {
         //return arraylist of stufff;
     }
 
+    public static double radius = 10; // in miles, I think
+
     public static ArrayList<Service> get_ford(){
         ArrayList<Service> ford_list = new ArrayList<Service>();
         try {
@@ -32,8 +34,10 @@ public class Retrieval {
                 JSONObject station = jsonBirds.getJSONObject(i);
                 if (station.getInt("availableBikes") > 0 && station.getString("statusValue").equals("In Service")) {
                     Location station_location = new Location(station.getDouble("latitude"), station.getDouble("longitude"));
-                    ford_list.add(new Ford(station_location, Service.start, Service.end));
-                    //also need to set the bike station destinations somehow???
+                    if (Location.displacement_between(station_location, Service.start) < radius) {
+                        ford_list.add(new Ford(station_location, Service.start, Service.end));
+                        //also need to set the bike station destinations somehow???
+                    }
                 }
             }
             return ford_list; //check if this works please
