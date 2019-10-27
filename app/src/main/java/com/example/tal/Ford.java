@@ -15,6 +15,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         super(loc, my_loc, final_dest);
         //this.route = get_route(loc, my_loc, final_dest, bike_dest);
         this.name = name;
+        this.extra_time = get_extra_time(bike_dest,final_dest);
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
@@ -58,7 +59,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         }
         return route;
     }
-    private static double radius = 1; // in miles, I think
+    private static double radius = 1/4; // in miles, I think
 
     @Override
     ArrayList<Service> extractServices(String json) {

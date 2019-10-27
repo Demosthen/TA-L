@@ -6,7 +6,6 @@
 
     android:clipToPadding="false"
     android:id = "@+id/service_summary"
-
     android:padding="15dp">
 
     <RelativeLayout

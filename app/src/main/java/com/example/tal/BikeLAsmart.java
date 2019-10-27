@@ -35,7 +35,7 @@ public class BikeLAsmart extends Service {
         return extract_url(new_url, "duration");
     }
 
-    private static double radius = 1; // in miles, I think
+    private static double radius = 1/4; // in miles, I think
 
     @Override
     ArrayList< Service > extractServices(String json) {
