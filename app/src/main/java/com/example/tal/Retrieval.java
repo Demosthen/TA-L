@@ -42,7 +42,7 @@ public class Retrieval {
             }
             return ford_list; //check if this works please
         } catch (JSONException e) {
-            Log.i(Bird.name, "Problem parsing json");
+            Log.i("Oops fordmaker", "Problem parsing json");
         }
 
 
