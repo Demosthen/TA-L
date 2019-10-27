@@ -16,7 +16,8 @@ public class Bird extends Service {
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
-        name = "Bird";
+        this.name = "Bird";
+        this.route = get_route(loc, my_loc, final_dest);
     }
 
     @Override
@@ -52,5 +53,16 @@ public class Bird extends Service {
             Log.i(Bird.name, "Problem parsing json");
         }
         return docList;
+    }
+
+    ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest){
+        ArrayList<Location> route = new ArrayList<Location>();
+        for (Location p : google_route(my_loc,loc)){
+            route.add(p);
+        }
+        for (Location p: google_route(loc,final_dest)){
+            route.add(p);
+        }
+        return route;
     }
 }

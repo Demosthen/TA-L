@@ -46,4 +46,5 @@ public class ZipCar extends Service {
         //return duration;
         return 5;
     }
+
 }

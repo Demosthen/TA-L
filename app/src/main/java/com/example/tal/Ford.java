@@ -11,9 +11,10 @@ import static java.lang.Math.ceil;
 public class Ford extends Service {//before execute this stuff on Ford, calculate bike_dest
     int distance_value, duration_value;
 
-    public Ford(Location loc, Location my_loc, Location final_dest){
+    public Ford(Location loc, Location my_loc, Location final_dest, Location bike_dest){
         super(loc, my_loc, final_dest);
-        name = "Ford";
+        this.name = "Ford";
+        this.route = get_route(loc, my_loc, final_dest, bike_dest);
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
@@ -49,19 +50,20 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-    int extract_url(String url, String par){
-
-        try {
-            //magic turns url into json string
-            String json ="";
-            JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
-            return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
-        } catch (JSONException e) {
-            Log.i("Oops：Ford error", "Problem parsing json");
-
+    ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest,Location bike_dest){
+        ArrayList<Location> route = new ArrayList<Location>();
+        for (Location p : google_route(my_loc,loc)){
+            route.add(p);
         }
-        return -1;
+        for (Location p: google_route(loc,bike_dest)){
+            route.add(p);
+        }
+        for (Location p: google_route(bike_dest,final_dest)){
+            route.add(p);
+        }
+        return route;
     }
+
 
 
 }

@@ -23,24 +23,29 @@ public class Retrieval {
         //return arraylist of stufff;
     }
 
+    public static double radius = 10; // in miles, I think
+
     public static ArrayList<Service> get_ford(){
         ArrayList<Service> ford_list = new ArrayList<Service>();
+        String json ="";
         try {
             String json = "";
             JSONObject baseJson = new JSONObject(json); //magically get it from the file somehow
             JSONArray station_list = baseJson.getJSONArray("stationBeanList");
             JSONArray jsonBirds = new JSONArray();
             for (int i = 0; i < station_list.length(); i++) {
-                JSONObject station = jsonBirds.getJSONObject(i);
+                JSONObject station = station_list.getJSONObject(i);
                 if (station.getInt("availableBikes") > 0 && station.getString("statusValue").equals("In Service")) {
                     Location station_location = new Location(station.getDouble("latitude"), station.getDouble("longitude"));
-                    ford_list.add(new Ford(station_location, Service.start, Service.end));
-                    //also need to set the bike station destinations somehow???
+                    if (Location.displacement_between(station_location, Service.start) < radius) {
+                        ford_list.add(new Ford(station_location, Service.start, Service.end, Service.end));
+                        //also need to set the bike station destinations somehow???
+                    }
                 }
             }
             return ford_list; //check if this works please
         } catch (JSONException e) {
-            Log.i(Bird.name, "Problem parsing json");
+            Log.i("Oops fordmaker", "Problem parsing json");
         }
 
 

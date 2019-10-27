@@ -8,6 +8,8 @@ import java.util.List;
 
 import android.content.AsyncTaskLoader;
 
+import static com.example.tal.MapsActivity.LOG_TAG;
+
 public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
     private String mQuery;
     private String mBaseLink;
@@ -38,6 +40,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
 //        for (int i = 0; i < output.size(); i++) {
 //            Log.v("bird",output.get(i).loc+"");
 //        }
+
         ArrayList<Service> output = new ArrayList<>();
         Bird test = new Bird(Service.start,Service.start,Service.end);
         test.name = jsonResponse;
