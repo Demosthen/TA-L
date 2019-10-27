@@ -35,7 +35,7 @@ public class Bird extends Service {
         double value = extract_url(new_url, "duration");
         return (int) (value * (0.000621371) / speed * (3600 / 5280));
     }
-    private static double radius = 1; // in miles, I think
+    private static double radius = 1/4; // in miles, I think
 
     @Override
     ArrayList< Service > extractServices(String json) {
