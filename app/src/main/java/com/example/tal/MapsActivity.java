@@ -204,10 +204,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //initialize service summary
         final FrameLayout summary = findViewById(R.id.service_summary);
         summary.setVisibility(View.GONE);
+        summary.setFocusable(true);
         summary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                summary.setVisibility(View.GONE);
+                if(!hasFocus) {
+                    summary.setVisibility(View.GONE);
+                }
             }
         });
         //initialize services Hashmap
@@ -269,6 +272,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                     });
+
                     return false;
                 }
                 return false;
