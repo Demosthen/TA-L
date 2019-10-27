@@ -26,11 +26,21 @@
             android:id = "@+id/BirdButton"
             android:textOn = "Bird"
             android:textOff = "Bird"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
         <ToggleButton
             style = "@style/ServiceFilter"
             android:id = "@+id/FordButton"
             android:textOn = "Go Bike"
             android:textOff = "Go Bike"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
         <ToggleButton
             style = "@style/ServiceFilter"
             android:id = "@+id/ZipcarButton"

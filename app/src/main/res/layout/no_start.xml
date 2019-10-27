@@ -3,11 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-    android:id="@+id/dest_input"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:hint = "@string/destHint"
-    android:textColorHint="@color/colorHint"
-    android:padding = "15dp"
+        android:id="@+id/dest_input"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:hint = "@string/destHint"
+        android:textColorHint="@color/colorHint"
+        android:padding = "15dp"
     />
 </LinearLayout>
