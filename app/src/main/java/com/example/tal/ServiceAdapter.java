@@ -28,6 +28,7 @@ public class ServiceAdapter extends ArrayAdapter {
             convertView= LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent,false);
         }
         final Service currentService = (Service) getItem(position);
+
         TextView serviceView=(TextView) convertView.findViewById(R.id.service_name);
         TextView ETAView = (TextView) convertView.findViewById(R.id.ETA);
         TextView EPriceView = (TextView) convertView.findViewById(R.id.EP);

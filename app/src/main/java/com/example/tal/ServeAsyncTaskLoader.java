@@ -33,7 +33,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
 
     @Override
     public List< Service > loadInBackground() {
-        String jsonResponse = Utils.makeHttpRequest(mQuery,mBaseLink,mApiKey,mLogTag);
+        //String jsonResponse = Utils.makeHttpRequest(mQuery,mBaseLink,mApiKey,mLogTag);
 //        ArrayList< Service > serviceType = new ArrayList<>();
 //        ArrayList< ArrayList > result = new ArrayList<>();
 //        ArrayList<Service> output = new Bird(Service.start,Service.start,Service.end).extractServices(jsonResponse);
@@ -43,7 +43,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
 
         ArrayList<Service> output = new ArrayList<>();
         Bird test = new Bird(Service.start,Service.start,Service.end);
-        Log.i("json",jsonResponse);
+        //Log.i("json",jsonResponse);
         output.add(test);
         return output;//Utils.extractDocs(jsonResponse);// TODO: change this line
     }

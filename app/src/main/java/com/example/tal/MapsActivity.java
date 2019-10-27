@@ -92,17 +92,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //      RequestQueue queue = Volley.newRequestQueue(this);
 //      queue.add(Utils.makeVolleyQueueRequest("",baseLink,"",""));
 
-        // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        // Initialize the Destination AutocompleteSupportFragment.
+        final AutocompleteSupportFragment destinationFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.dest_fragment);
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-
+        destinationFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        destinationFragment.setText("Destination");
         // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        destinationFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                TextView startText = findViewById(R.id.start_input);
+                /*TextView startText = findViewById(R.id.start_input);
                 TextView destText = findViewById(R.id.dest_input);
                 //For transitions
                 ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
@@ -115,23 +115,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     TransitionManager.go(start, transition);
                     Log.i(LOG_TAG, destPlace.getName());
                     ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
-                }
-                else{
+                }*/
+                /*else{
                     startPlace = place;
 
                     startText.setText(startPlace.getName());
-                }
+                }*/
                 // Move camera
                 mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                destinationFragment.setText(place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(LOG_TAG, "An error occurred: " + status);
+            }
+        });
+
+        // Initialize the Destination AutocompleteSupportFragment.
+        final AutocompleteSupportFragment startFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.start_fragment);
+
+        // Specify the types of place data to return.
+        startFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        startFragment.setText("Start");
+        // Set up a PlaceSelectionListener to handle the response.
+        startFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                /*TextView startText = findViewById(R.id.start_input);
+                TextView destText = findViewById(R.id.dest_input);
+                //For transitions
+                ViewGroup sceneRoot = (ViewGroup) findViewById(R.id.transition_root);
+                Scene start = Scene.getSceneForLayout(sceneRoot, R.layout.start, getApplicationContext());
+                final Scene no_start = Scene.getSceneForLayout(sceneRoot, R.layout.no_start, getApplicationContext());
+
+                if(destText.getText().length() == 0){
+                    destPlace = place;
+                    Log.i(LOG_TAG, destPlace.getName());
+                    TransitionManager.go(start, transition);
+                    Log.i(LOG_TAG, destPlace.getName());
+                    ((TextView)findViewById(R.id.dest_input)).setText(destPlace.getName());
+                }*/
+                /*else{
+                    startPlace = place;
+
+                    startText.setText(startPlace.getName());
+                }*/
+                // Move camera
+                mMap.addMarker(new MarkerOptions().position(place.getLatLng()).title("Marker at Destination"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                startFragment.setText(place.getName());
 
             }
 
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                Log.i(logTag, "An error occurred: " + status);
+                Log.i(LOG_TAG, "An error occurred: " + status);
             }
         });
 
@@ -204,8 +248,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onLoadFinished(Loader< List< Service > > loader, List< Service > services) {
-
+    public void onLoadFinished(Loader< List< Service > > loader, List< Service > data) {
+        getLoaderManager().destroyLoader(0);
+        if(data!=null){
+            if(!adapter.isEmpty()) {
+                adapter.clear();
+            }
+            adapter.addAll(data);
+        }
+        /*if(data.size()==0&&!firstQuery){
+            TextView emptyView= (TextView) findViewById(R.id.emptyView);
+            emptyView.setVisibility(View.VISIBLE);
+        }*/
     }
 
     @Override
@@ -213,21 +267,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         adapter.clear();
     }
 
-    // @Override
-    public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
-        getLoaderManager().destroyLoader(0);
-        if(data!=null){
-            if(!adapter.isEmpty()){
-                adapter.clear();
-            }
-
-            adapter.addAll(data);
-        }
-        /*if(data.size()==0&&!firstQuery){
-            TextView emptyView= (TextView) findViewById(R.id.emptyView);
-            emptyView.setVisibility(View.VISIBLE);
-        }*/
-
-    }
 
 }
