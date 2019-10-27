@@ -17,7 +17,7 @@ public class Ford_park extends Service_park {
 
     public static double radius = 2; //remove if needed to ensure a station
 
-    public static ArrayList<Location> extractParking(String json, Location d) {
+    public static ArrayList<Location> extractParking(String json) {
         ArrayList<Location> park_list = new ArrayList<>();
         try {
             JSONObject baseJSON = new JSONObject(json);
