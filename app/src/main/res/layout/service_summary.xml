@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/rounded_corner"
+
     android:clipToPadding="false"
     android:id = "@+id/service_summary"
     android:padding="15dp">
@@ -11,19 +11,20 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner"
         android:layout_gravity="center">
 
         <TextView
             android:id="@+id/service_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:text="SERVICE_NAME"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/ETA"
@@ -34,7 +35,8 @@
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:text="ETA" />
+            android:text="ETA"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/EP"
@@ -44,7 +46,8 @@
             android:layout_centerHorizontal="true"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
-            android:text="EPrice" />
+            android:text="EPrice"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/order"
@@ -55,5 +58,12 @@
             android:paddingRight="10dp"
             android:text="@string/ORDER"
             />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below = "@id/EP"
+
+            android:text = "Set as Start"
+            android:id = "@+id/setStart"/>
     </RelativeLayout>
 </FrameLayout>
