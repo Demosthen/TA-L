@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below = "@id/order"
             android:layout_centerHorizontal="true"
-            android:text = "Set as Start"
+            android:text = "Add as End Point"
             android:id = "@+id/setStart"/>
     </RelativeLayout>
 </FrameLayout>

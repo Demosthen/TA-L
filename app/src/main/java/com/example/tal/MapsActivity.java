@@ -51,7 +51,15 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -122,6 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 destinationFragment.setText(place.getName());
                 destPlace = place;
+                Service.end = new Location(destPlace.getLatLng().latitude, destPlace.getLatLng().longitude);
                 if(startCalled){
                     getLoaderManager().initLoader(0, null, MapsActivity.this);
                 }
@@ -155,6 +164,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
                 startPlace = place;
                 startFragment.setText(place.getName());
+                Service.start = new Location(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
                 if(destCalled){
                     getLoaderManager().initLoader(0, null, MapsActivity.this);
                 }
@@ -278,15 +288,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 LatLng destCoords = destPlace.getLatLng();
                                 if(mark.getTitle().equals(Bird.name)){
                                     Bird b = (Bird) service;
+                                    MyAsync birdie = new MyAsync();
+                                    Bird Birdie = new Bird(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end);
+                                    Birdie.name2 = Bird.name;
+                                    ArrayList borOut = new ArrayList();
+                                    borOut.add(new Location(1,0));
+                                    borOut.add(Service.start);
+                                    borOut.add(new Location(startCoords.latitude, startCoords.longitude));
+                                    borOut.add(Service.end);
+                                    Log.v(LOG_TAG,"EXECUTING BIRDIES");
+                                    birdie.execute(borOut);
 
-                                    b.get_route(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end);
-                                    drawLines(b.route);
                                 }
                                 if(mark.getTitle().equals(Ford.name)){
                                     Ford b = (Ford) service;
+                                    MyAsync fordie = new MyAsync();
+                                    Ford Fordie =  new Ford(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end,new Location(destCoords.latitude, destCoords.longitude));
+                                    Fordie.name2 = Ford.name;
+                                    ArrayList ForOut = new ArrayList();
+                                    ForOut.add(new Location(0,0));
+                                    ForOut.add(Service.start);
+                                    ForOut.add(new Location(startCoords.latitude, startCoords.longitude));
+                                    ForOut.add(Service.end);
+                                    ForOut.add(new Location(destCoords.latitude, destCoords.longitude));
+                                    Log.v(LOG_TAG,"EXECUTING FORDIES");
+                                    fordie.execute(ForOut);
 
-                                    b.get_route(Service.start, new Location(startCoords.latitude, startCoords.longitude), Service.end,new Location(destCoords.latitude, destCoords.longitude));
-                                    drawLines(b.route);
                                 }
                             }
                         });
@@ -383,6 +410,131 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }*/
     }
 
+    /**
+     * {@link AsyncTask} to perform the network request on a background thread, and then
+     * update the UI with the first earthquake in the response.
+     */
+    public class MyAsync extends AsyncTask<ArrayList<Location>, Void, ArrayList<Location>> {
 
 
+        /**
+         * Update
+         */
+        @Override
+        protected void onPostExecute(ArrayList<Location> locs) {
+            if (locs == null) {
+                return;
+            }
+
+            drawLines(locs);
+        }
+        @Override
+        protected ArrayList<Location> doInBackground(ArrayList<Location>... a ){
+            Log.v(LOG_TAG, "WTF");
+            if(a[0].get(0).x == 1){
+                Log.v(LOG_TAG,"It's a BIRDIE");
+                Bird newFord = new Bird (a[0].get(1), a[0].get(2), a[0].get(3));
+                return newFord.get_route( a[0].get(1),  a[0].get(2), a[0].get(3));
+            }
+            else if(a[0].get(0).x == 0){
+                Log.v(LOG_TAG,"It's a FORDIE");
+                Ford newFord = new Ford(a[0].get(1), a[0].get(2), a[0].get(3), a[0].get(4));
+                return  newFord.get_route(a[0].get(1), a[0].get(2), a[0].get(3), a[0].get(4));
+            }
+            else{
+                Log.v(LOG_TAG, a.toString());
+                return null;
+            }
+
+        }
+        /**
+         * Returns new URL object from the given string URL.
+         */
+        private URL createUrl(String stringUrl) {
+            URL url = null;
+            try {
+                url = new URL(stringUrl);
+            } catch (MalformedURLException exception) {
+                Log.e(LOG_TAG, "Error with creating URL", exception);
+                return null;
+            }
+            return url;
+        }
+
+        /**
+         * Make an HTTP request to the given URL and return a String as the response.
+         */
+        public String makeHttpRequest(String query, String base_link, String api_key, String log_tag){
+//        URL link=makeURL(query,base_link,api_key,log_tag);
+            URL link = null;
+            try {
+                link = new URL(base_link);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection=null;
+            String jsonResponse=null;
+            InputStream stream=null;
+            if(link!=null){
+
+                try {
+                    urlConnection = (HttpURLConnection) link.openConnection();
+                    urlConnection.setConnectTimeout(15000);
+                    urlConnection.setReadTimeout(10000);
+                    urlConnection.setDefaultUseCaches(false);
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setRequestProperty("Request Method","GET");
+                    urlConnection.connect();
+                    if(urlConnection.getResponseCode()==HttpURLConnection.HTTP_OK){
+                        stream=urlConnection.getInputStream();
+                        jsonResponse=readFromStream(stream);
+
+                    }
+                    else{
+                        Log.i(log_tag,"error code:" + urlConnection.getResponseCode() + "; info: " + urlConnection.getResponseMessage());
+                    }
+                }
+                catch(IOException e){
+                    Log.i(log_tag, "problem with connection");
+                }
+                finally{
+                    if(urlConnection!=null){
+                        urlConnection.disconnect();
+                    }
+                    if(stream!=null){
+                        try{
+                            stream.close();
+                        }
+                        catch(IOException e){
+                            Log.i(log_tag,"problem with inputStream");
+                        }
+                    }
+                }
+            }
+
+            return jsonResponse;
+        }
+
+        /**
+         * Convert the {@link InputStream} into a String which contains the
+         * whole JSON response from the server.
+         */
+        private String readFromStream(InputStream stream)throws IOException{
+            if(stream!=null){
+                InputStreamReader inReader= new InputStreamReader(stream, Charset.forName("UTF-8"));
+                BufferedReader reader= new BufferedReader(inReader);
+                StringBuilder response=new StringBuilder("");
+                String line=reader.readLine();
+                while(line!=null){
+                    response.append(line);
+                    line=reader.readLine();
+                }
+                return response.toString();
+            }
+            return null;
+        }
+
+    }
 }
+
+

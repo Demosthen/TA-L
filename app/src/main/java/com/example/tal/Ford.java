@@ -6,19 +6,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+
+import static com.example.tal.MapsActivity.LOG_TAG;
 import static java.lang.Math.ceil;
 
 public class Ford extends Service {//before execute this stuff on Ford, calculate bike_dest
     int distance_value, duration_value;
     public static String name = "Ford";
+    public static String name2 = "";
     public static double radius = 0.5; // in miles, I think
     public static int extra_time;
+    public static Location bike_dest;
     public Ford(Location loc, Location my_loc, Location final_dest, Location bike_dest){
         super(loc, my_loc, final_dest);
+        this.bike_dest = bike_dest;
         //this.route = get_route(loc, my_loc, final_dest, bike_dest);
         this.name = name;
         if(bike_dest!=null && final_dest!=null)
-        this.extra_time = get_extra_time(bike_dest,final_dest);
+        this.extra_time = 0;
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
@@ -51,8 +56,9 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         //return walking value;
     }
 
-    ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest,Location bike_dest){
+    public ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest,Location bike_dest){
         ArrayList<Location> route = new ArrayList<Location>();
+        Log.v(LOG_TAG, "GETTING FORDIE ROUTES");
         for (Location p : google_route(my_loc,loc)){
             route.add(p);
         }
@@ -62,6 +68,7 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         for (Location p: google_route(bike_dest,final_dest)){
             route.add(p);
         }
+        Log.v(LOG_TAG, "DONE WITH FORDIE ROUTES");
         return route;
     }
 
@@ -93,5 +100,10 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         return bikeshare_list;
     }
 
-
+    public class  FordAsyncTask extends GoogleAsync{
+        @Override
+        protected ArrayList<Location>doInBackground(Ford... a){
+            return get_route(a[0].loc, a[0].my_loc, a[0].final_dest, a[0].bike_dest);
+        }
+    }
 }

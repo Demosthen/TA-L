@@ -77,4 +77,10 @@ public class BikeLAsmart extends Service {
         }
         return route;
     }
+    public class BikeLAAsyncTask extends GoogleAsync{
+        @Override
+        protected ArrayList<Location>doInBackground(Ford... a){
+            return get_route(a[0].loc, a[0].my_loc, a[0].final_dest);
+        }
+    }
 }

@@ -128,7 +128,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
                 Log.i(Bird.name, "Problem parsing json");
             }
             Log.i("ford_size",fordList.size()+"");
-            dataRepository.put(Bird.name,fordList);
+            dataRepository.put(Ford.name,fordList);
 
             //create ford_park objects
             String jsonFord_parkResponse = Utils.makeHttpRequest(mQuery,bikeShareLink,mApiKey,mLogTag);

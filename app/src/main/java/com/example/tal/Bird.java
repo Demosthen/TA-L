@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.tal.MapsActivity.LOG_TAG;
+
 public class Bird extends Service {
     int speed = 15;
     double base = 1;
@@ -61,14 +63,22 @@ public class Bird extends Service {
         return birdList;
     }
 
-    ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest){
+    public ArrayList<Location> get_route(Location loc, Location my_loc, Location final_dest){
         ArrayList<Location> route = new ArrayList<Location>();
+        Log.v(LOG_TAG, "GETTING BIRDIE ROUTES");
         for (Location p : google_route(my_loc,loc)){
             route.add(p);
         }
         for (Location p: google_route(loc,final_dest)){
             route.add(p);
         }
+        Log.v(LOG_TAG, "FINISHED BIRDIE ROUTES");
         return route;
+    }
+    public class BirdAsyncTask extends GoogleAsync{
+        @Override
+        protected ArrayList<Location>doInBackground(Ford... a){
+            return get_route(a[0].loc, a[0].my_loc, a[0].final_dest);
+        }
     }
 }

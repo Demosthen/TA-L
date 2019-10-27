@@ -1,6 +1,8 @@
 package com.example.tal;
 
+import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -9,8 +11,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
+
+import static com.example.tal.MapsActivity.LOG_TAG;
 
 public abstract class Service{
 
@@ -19,6 +32,8 @@ public abstract class Service{
     static String url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial"; //google url for distance between locations
     static String route_url = "https://maps.googleapis.com/maps/api/directions/json?";
     static String API_key = "&key=AIzaSyA8CApQee8fXVHI3FLEP6IE8bK_B6_oIpY";
+    public static String name2;
+    public Location bike_dest;
     public double cost; //cost to get to final destination
     public int time; //time to get to final destination in seconds
     public int walk; //time to get from user current location to service location in seconds
@@ -40,9 +55,9 @@ public abstract class Service{
         this.my_loc = my_loc;
         this.final_dest = final_dest;
         if(loc!=null && my_loc!=null&&final_dest!=null) {
-            this.time = get_time(loc, final_dest);
+            this.time = 0;
             this.cost = get_cost(loc, final_dest);
-            this.walk = get_walk(loc, my_loc);
+            this.walk = 0;
         }
 
 
@@ -107,4 +122,119 @@ public abstract class Service{
         return path;
     }
 
+
+    /**
+     * {@link AsyncTask} to perform the network request on a background thread, and then
+     * update the UI with the first earthquake in the response.
+     */
+    public abstract class GoogleAsync extends AsyncTask<Ford, Void, ArrayList<Location>> {
+
+
+        /**
+         * Update
+         */
+        @Override
+        protected void onPostExecute(ArrayList<Location> locs) {
+            if (locs == null) {
+                return;
+            }
+
+            route = (locs);
+        }
+
+        /**
+         * Returns new URL object from the given string URL.
+         */
+        private URL createUrl(String stringUrl) {
+            URL url = null;
+            try {
+                url = new URL(stringUrl);
+            } catch (MalformedURLException exception) {
+                Log.e(LOG_TAG, "Error with creating URL", exception);
+                return null;
+            }
+            return url;
+        }
+
+        /**
+         * Make an HTTP request to the given URL and return a String as the response.
+         */
+        public String makeHttpRequest(String query, String base_link, String api_key, String log_tag){
+//        URL link=makeURL(query,base_link,api_key,log_tag);
+            URL link = null;
+            try {
+                link = new URL(base_link);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection=null;
+            String jsonResponse=null;
+            InputStream stream=null;
+            if(link!=null){
+
+                try {
+                    urlConnection = (HttpURLConnection) link.openConnection();
+                    urlConnection.setConnectTimeout(15000);
+                    urlConnection.setReadTimeout(10000);
+                    urlConnection.setDefaultUseCaches(false);
+                    urlConnection.setUseCaches(false);
+                    urlConnection.setRequestProperty("Request Method","GET");
+                    urlConnection.connect();
+                    if(urlConnection.getResponseCode()==HttpURLConnection.HTTP_OK){
+                        stream=urlConnection.getInputStream();
+                        jsonResponse=readFromStream(stream);
+
+                    }
+                    else{
+                        Log.i(log_tag,"error code:" + urlConnection.getResponseCode() + "; info: " + urlConnection.getResponseMessage());
+                    }
+                }
+                catch(IOException e){
+                    Log.i(log_tag, "problem with connection");
+                }
+                finally{
+                    if(urlConnection!=null){
+                        urlConnection.disconnect();
+                    }
+                    if(stream!=null){
+                        try{
+                            stream.close();
+                        }
+                        catch(IOException e){
+                            Log.i(log_tag,"problem with inputStream");
+                        }
+                    }
+                }
+            }
+
+            return jsonResponse;
+        }
+
+        /**
+         * Convert the {@link InputStream} into a String which contains the
+         * whole JSON response from the server.
+         */
+        private String readFromStream(InputStream stream)throws IOException{
+            if(stream!=null){
+                InputStreamReader inReader= new InputStreamReader(stream, Charset.forName("UTF-8"));
+                BufferedReader reader= new BufferedReader(inReader);
+                StringBuilder response=new StringBuilder("");
+                String line=reader.readLine();
+                while(line!=null){
+                    response.append(line);
+                    line=reader.readLine();
+                }
+                return response.toString();
+            }
+            return null;
+        }
+
+    }
 }
+
+
+
+
+
+
+
