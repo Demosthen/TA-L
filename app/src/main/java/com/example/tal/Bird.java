@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Bird extends Service {
     int speed = 15;
     double base = 1;
-    double rate = 0.15 / 60;
+    double rate = 0.23 / 60;
     int battery;
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
