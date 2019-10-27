@@ -43,8 +43,8 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< List< Service > > {
 
         ArrayList<Service> output = new ArrayList<>();
         Bird test = new Bird(Service.start,Service.start,Service.end);
-        //Log.i("json",jsonResponse);
-        output.add(test);
-        return output;//Utils.extractDocs(jsonResponse);// TODO: change this line
+        Log.i("json",jsonResponse);
+        output = test.extractServices(jsonResponse);
+        return output;
     }
 }

@@ -79,34 +79,7 @@ public class Utils {
         }
         return null;
     }
-    /*
-    public static ArrayList<Document> extractDocs(String json){
-        ArrayList<Document> docList= new ArrayList<Document>();
-        try{
-            JSONObject baseJson= new JSONObject(json);
-            JSONObject response= baseJson.getJSONObject("response");
-            JSONArray jsonDocs = response.getJSONArray("results");
-            for(int i=0; i<jsonDocs.length(); i++){
-                JSONObject jsonDoc= jsonDocs.getJSONObject(i);
-                String section=jsonDoc.getString("sectionName");
-                String title= jsonDoc.getString("webTitle");
-                String date= jsonDoc.getString("webPublicationDate");
-                date=date.substring(0,date.indexOf("T"));
-                String link= jsonDoc.getString("webUrl");
-                Document doc= new Document(title,date,section,link);
-                if(jsonDoc.has("author")){
-                    String author=jsonDoc.getString("author");
-                    doc.setAuthor(author);
-                }
-                docList.add(doc);
-            }
-        }
-        catch(JSONException e){
-            Log.i(MapsActivity.LOG_TAG, "Problem parsing json");
-        }
-        return docList;
 
-    }*/
     public static String makeHttpRequest(String query, String base_link, String api_key, String log_tag){
 //        URL link=makeURL(query,base_link,api_key,log_tag);
         URL link = null;
@@ -124,17 +97,9 @@ public class Utils {
                 urlConnection = (HttpURLConnection) link.openConnection();
                 urlConnection.setConnectTimeout(15000);
                 urlConnection.setReadTimeout(10000);
-//                urlConnection.setRequestProperty("Authorization","Bird eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBVVRIIiwidXNlcl9pZCI6IjlhNjVkYjRjLTU4NDctNDU1OS05ZDFmLWIzY2Y5Mjg1ODhmNyIsImRldmljZV9pZCI6IjI5M2ZlYzhjLWE2YTUtMTFlOS05YjViLWEwOTk5YjEwNTM1NSIsImV4cCI6MTU5NDY5MjM4OH0.09T6VCGDt-mWz6oYiGawzl0gJa-a4Fq2Y3qaOqVE8nA");
-//                urlConnection.setRequestProperty("Device-id","85d6fcf6-4838-4616-aea0-41fc6381a570");
-//                urlConnection.setRequestProperty("App-Version","4.41.0");
-//                urlConnection.setRequestProperty("Location","{latitude:37.77249,longitude:-122.40910,altitude:500,accuracy:100,speed:-1,heading:-1}");
                 urlConnection.setDefaultUseCaches(false);
                 urlConnection.setUseCaches(false);
                 urlConnection.setRequestProperty("Request Method","GET");
-//                urlConnection.setRequestProperty("Authorization", "Bird eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBVVRIIiwidXNlcl9pZCI6IjlhNjVkYjRjLTU4NDctNDU1OS05ZDFmLWIzY2Y5Mjg1ODhmNyIsImRldmljZV9pZCI6IjI5M2ZlYzhjLWE2YTUtMTFlOS05YjViLWEwOTk5YjEwNTM1NSIsImV4cCI6MTU5NDY5MjM4OH0.09T6VCGDt-mWz6oYiGawzl0gJa-a4Fq2Y3qaOqVE8nA");
-//                urlConnection.setRequestProperty("Device-id","121E4567-E89B-12D3-A456-426655440200");
-//                urlConnection.setRequestProperty("App-Version","4.41.0");
-//                urlConnection.setRequestProperty("Location","{latitude:37.77249,longitude:-122.40910,altitude:500,accuracy:100,speed:-1,heading:-1}");
                 urlConnection.connect();
                 if(urlConnection.getResponseCode()==HttpURLConnection.HTTP_OK){
                     stream=urlConnection.getInputStream();

@@ -15,9 +15,9 @@ public class Ford_park extends Service_park {
         name = "Ford_park";
     }
 
-    public static double radius = 10; //remove if needed to ensure a station
+    public static double radius = 2; //remove if needed to ensure a station
 
-    public ArrayList<Location> extractParking(String json, Location d) {
+    public static ArrayList<Location> extractParking(String json, Location d) {
         ArrayList<Location> park_list = new ArrayList<>();
         try {
             JSONObject baseJSON = new JSONObject(json);
@@ -29,7 +29,7 @@ public class Ford_park extends Service_park {
                     park_list.add(s_loc);
                 }
             }
-            //return gbfs_list; //accuracy still not guaranteed
+            return park_list; //accuracy still not guaranteed
         } catch (JSONException e) {
             Log.i("Oops gbfs_maker", "Problem parsing json");
         }
