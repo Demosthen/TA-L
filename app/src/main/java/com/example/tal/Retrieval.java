@@ -25,12 +25,11 @@ public class Retrieval {
 
     public static double radius = 1; // in miles, I think
 
-    public static ArrayList<Service> get_bikeshare() {
+    public static ArrayList<Service> get_bikeshare(String json) {
         ArrayList<Service> bikeshare_list = new ArrayList<Service>();
 
         try {
-            String json = ""; //Jeffery give me a thing
-//            ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
+            ArrayList<Location> possible_destinations = Ford_park.extractParking(json, Service.end);
             JSONObject baseJSON = new JSONObject(json);
             JSONArray stations = baseJSON.getJSONArray("features");
             for (int i=0; i<stations.length(); i++) {

@@ -51,12 +51,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<List<Service>>{
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LoaderManager.LoaderCallbacks<HashMap<String,List<Service>>>{
 
     private GoogleMap mMap;
-    public static String query = "";
-    public static String baseLink = "https://data.lime.bike/api/partners/v1/gbfs/los_angeles/free_bike_status";
-    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
+//    public static String query = "";
+//    public static String baseLink = "https://bikeshare.metro.net/stations/json";
+//    public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
     public ArrayList<Service> services = new ArrayList<Service>();
@@ -257,12 +257,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public Loader<List<Service>> onCreateLoader(int id, Bundle args){
-        return new ServeAsyncTaskLoader(this, query,baseLink,apiKey,LOG_TAG);
+    public Loader< HashMap< String,List<Service> > > onCreateLoader(int id, Bundle args){
+        return new ServeAsyncTaskLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader< List< Service > > loader, List< Service > data) {
+    public void onLoadFinished(Loader< HashMap< String,List<Service> > > loader, HashMap<String, List<Service> > data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader< HashMap< String,List<Service> > > loader) {
+        adapter.clear();
+    }
+
+    // @Override
+    public void onLoadFinished(androidx.loader.content.Loader<List<Service>> loader, List<Service> data) {
         getLoaderManager().destroyLoader(0);
         if(data!=null){
             if(!adapter.isEmpty()) {
