@@ -11,6 +11,8 @@ import static java.lang.Math.ceil;
 public class Ford extends Service {//before execute this stuff on Ford, calculate bike_dest
     int distance_value, duration_value;
     public static String name = "Ford";
+    public static double radius = 0.5; // in miles, I think
+    public static int extra_time;
     public Ford(Location loc, Location my_loc, Location final_dest, Location bike_dest){
         super(loc, my_loc, final_dest);
         //this.route = get_route(loc, my_loc, final_dest, bike_dest);
@@ -20,30 +22,32 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
-        if (time<30*60){
-            return 5;
+        if (time<30.0*60.0){
+            return 5.0;
         }
         else{
-            return 5+1.75*Math.ceil((time-30*60)/30*60);
+            return 5.0+1.75*Math.ceil((time-30.0*60.0)/(30.0*60.0));
         }
     }
 
     @Override
-    int get_time(Location loc, Location bike_dest) {
+    String get_time_url(Location loc, Location bike_dest) {
         String origin ="&origins="+loc.x+","+loc.y;
         String destination = "&destinations="+bike_dest.x+","+bike_dest.y;
         String mode = "&mode=bicycling";
         String new_url = url+origin+destination+mode+API_key;
-        return extract_url(new_url, "duration");
+        return new_url;
+//        String jsonResponse = Utils.makeHttpRequest("",new_url,"","");
+//        return extract_url(jsonResponse, "duration");
 
     }
 
-    int get_extra_time(Location bike_dest, Location final_dest){
+    String get_extra_time(Location bike_dest, Location final_dest){
         String origin = "&origins="+bike_dest.x+","+bike_dest.y;
         String destination = "&destinations="+final_dest.x+","+final_dest.y;
         String mode = "&mode=walking";
-        String new_url = url+origin+destination+mode+API_key;
-        return extract_url(new_url, "duration");
+        String new_url = Service.url+origin+destination+mode+API_key;
+        return new_url;
         //return walking value;
     }
 
@@ -60,7 +64,6 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
         }
         return route;
     }
-    private static double radius = 0.5; // in miles, I think
 
     @Override
     ArrayList<Service> extractServices(String json) {
@@ -74,7 +77,10 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
                 if (st.getInt("bikesAvailable") > 0) {
                     Location st_loc  = new Location(st.getDouble("latitude"), st.getDouble("longitude"));
                     if (Location.displacement_between(st_loc, Service.start) < radius) {
-                        bikeshare_list.add(new Ford(st_loc, Service.start, Service.end, Service.end));
+                        Ford ford = new Ford(st_loc, Service.start, Service.end, Service.end);
+//                        ford.time = get_time(st_loc,Service.end);
+//                        ford.walk = get_walk(st_loc,Service.start);
+                        bikeshare_list.add(ford);
                         Log.i("ford_locations",st_loc + "");
                     }
                 }
