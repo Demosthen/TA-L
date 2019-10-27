@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.transition.AutoTransition;
 import android.transition.Scene;
 import android.transition.Transition;
@@ -77,6 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         listView.setAdapter(adapter);
         //start loader
         getLoaderManager().initLoader(0,null, MapsActivity.this);
+
 
         // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
