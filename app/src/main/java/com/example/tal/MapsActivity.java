@@ -50,7 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     public static String query = "";
-    public static String baseLink = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
+    public static String baseLink = "https://data.lime.bike/api/partners/v1/gbfs/los_angeles/free_bike_status";
     public static String apiKey = "https://api.birdapp.com/bird/nearby?latitude=37.77184&longitude=-122.40910&radius=100";
     public static String LOG_TAG = "TEAMAVATARPLUSLARRY";
 
@@ -123,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                Log.i(logTag, "An error occurred: " + status);
+                Log.i(LOG_TAG, "An error occurred: " + status);
             }
         });
 

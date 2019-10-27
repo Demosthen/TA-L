@@ -45,7 +45,7 @@ public class Retrieval {
         } catch (JSONException e) {
             Log.i("Oops gbfs_maker", "Problem parsing json");
         }
-
+        return gbfs_list; //accuracy still not guaranteed
     }
 
 //    public static ArrayList<Service> get_ford(){

@@ -12,7 +12,8 @@ public class Bird extends Service {
     int speed = 15;
     double base = 1;
     double rate = 0.15 / 60;
-    int battery;
+    boolean is_reserved;
+    boolean is_disabled;
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
@@ -39,19 +40,23 @@ public class Bird extends Service {
         ArrayList< Service > docList = new ArrayList<>();
         try {
             JSONObject baseJson = new JSONObject(json);
-            JSONObject response = baseJson.getJSONObject("response");
-            JSONArray jsonBirds = response.getJSONArray("birds");
+            JSONObject data = baseJson.getJSONObject("data");
+            JSONArray jsonBirds = data.getJSONArray("bikes");
+            Log.i("bikes",jsonBirds.toString());
             for (int i = 0; i < jsonBirds.length(); i++) {
                 JSONObject jsonBird = jsonBirds.getJSONObject(i);
-                JSONObject jsonLocation = jsonBird.getJSONObject("location");
-                Location location = new Location(jsonLocation.getDouble("latitude"),jsonLocation.getDouble("longitude"));
+                String Latitude = jsonBird.getString("lat");
+                String Longitude = jsonBird.getString("lon");
+                Location location = new Location(Double.parseDouble(Latitude),Double.parseDouble(Longitude));
                 Bird bird = new Bird(location, Service.start, Service.end);
-                bird.battery = jsonBird.getInt("battery_level");
+                bird.is_reserved = Integer.parseInt(jsonBird.get("is_reserved").toString()) == 1;
+                bird.is_disabled = Integer.parseInt(jsonBird.get("is_disabled").toString()) == 1;
                 docList.add(bird);
             }
         } catch (JSONException e) {
             Log.i(Bird.name, "Problem parsing json");
         }
+        Log.i("length",docList.size()+"");
         return docList;
     }
 
