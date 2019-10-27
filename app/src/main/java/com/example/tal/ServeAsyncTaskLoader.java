@@ -65,7 +65,7 @@ public class ServeAsyncTaskLoader extends AsyncTaskLoader< HashMap< String,List<
             Log.i("json",jsonFord_parkResponse);
             dataRepository.put(Ford_park.name,ford_park.extractParking(jsonFord_parkResponse));
         }
-        if((boolean)buttons.get("ZipCar")){ //When Go Bike button is initially pressed
+        if((boolean)buttons.get("Zip Car")){ //When Go Bike button is initially pressed
             //create bikeLAsmart objects
             String bikeLAsmartResponse = Utils.makeHttpRequest(mQuery,bikeLAsmartLink,mApiKey,mLogTag);
             BikeLAsmart bikelasmart= new BikeLAsmart(Service.start,Service.start,Service.end);

@@ -5,6 +5,7 @@
     android:layout_gravity="center"
     android:background="@drawable/rounded_corner"
     android:clipToPadding="false"
+    android:id = "@+id/service_summary"
     android:padding="15dp">
 
     <RelativeLayout
@@ -53,6 +54,6 @@
             android:layout_centerHorizontal="true"
             android:paddingRight="10dp"
             android:text="@string/ORDER"
-            android:corners/>
+            />
     </RelativeLayout>
 </FrameLayout>
