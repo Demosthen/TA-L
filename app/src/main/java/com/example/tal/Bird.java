@@ -16,8 +16,8 @@ public class Bird extends Service {
 
     public Bird(Location loc, Location my_loc, Location final_dest) {
         super(loc, my_loc, final_dest);
-        name = "Bird";
-        route = get_route(loc, my_loc, final_dest);
+        this.name = "Bird";
+        this.route = get_route(loc, my_loc, final_dest);
     }
 
     @Override

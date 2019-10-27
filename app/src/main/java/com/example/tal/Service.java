@@ -50,7 +50,7 @@ public abstract class Service{
 
         try {
             //magic turns url into json string
-            JSONObject baseJson = new JSONObject(); //go to row, elements, par, value
+            //JSONObject baseJson = new JSONObject(); //go to row, elements, par, value
             String json = "";
             JSONObject baseJson = new JSONObject(json); //go to row, elements, par, value
             return baseJson.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0).getJSONObject(par).getInt("value");
@@ -75,14 +75,15 @@ public abstract class Service{
         String origin = "origin="+o.x+","+o.y;
         String destination = "&destination="+d.x+","+d.y;
         String url_path = route_url+origin+destination+API_key;
-        //magic turns url into json string
+        String jsonResponse = Utils.makeHttpRequest("",url_path,"","");
+
         try{
-            JSONObject baseJson = new JSONObject();
+            JSONObject baseJson = new JSONObject(jsonResponse);
             JSONArray steps = baseJson.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONArray("steps");
             for (int i = 0; i < steps.length(); i++){
                 JSONObject jsonStep = steps.getJSONObject(i);
                 JSONObject end = jsonStep.getJSONObject("end_location");
-                path.add(new Location(end.getDouble("lat"),end.getDouble("lon")));
+                path.add(new Location(end.getDouble("lat"),end.getDouble("lng")));
             }
         } catch (JSONException e) {
             Log.i("google route", "Problem parsing json");

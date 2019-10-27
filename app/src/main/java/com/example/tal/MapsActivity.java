@@ -117,7 +117,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                Log.i(logTag, "An error occurred: " + status);
+                Log.i(LOG_TAG, "An error occurred: " + status);
             }
         });
 

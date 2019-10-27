@@ -16,4 +16,7 @@ public class Location {
         /*return 2*asin(sqrt((sin((one.x-two.x)/2))^2 +
                 cos(one.x)*cos(two.x)*pow((sin((one.y-two.y)/2), 2)));*/
     }
+    public String toString(){
+        return "("+Double.toString(x)+", "+Double.toString(y)+")";
+    }
 }

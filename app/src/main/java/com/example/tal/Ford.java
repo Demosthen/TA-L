@@ -13,8 +13,8 @@ public class Ford extends Service {//before execute this stuff on Ford, calculat
 
     public Ford(Location loc, Location my_loc, Location final_dest, Location bike_dest){
         super(loc, my_loc, final_dest);
-        name = "Ford";
-        route = get_route(loc, my_loc, final_dest, bike_dest);
+        this.name = "Ford";
+        this.route = get_route(loc, my_loc, final_dest, bike_dest);
     }
     @Override
     double get_cost(Location loc, Location bike_dest) {
