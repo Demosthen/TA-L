@@ -1,3 +1,3 @@
-# TA-L
-![test bike image](https://raw.githubusercontent.com/Demosthen/TA-L/app/java/res/mipmap/bike.png)
+# ZipBird: Zip Through Life, Free as a Bird
+![test bike image](https://raw.githubusercontent.com/Demosthen/TA-L/app/src/main/res/mipmap-xxhdpi/bike.png)
 
