@@ -1,3 +1,2 @@
 # ZipBird: Zip Through Life, Free as a Bird
-![test bike image](https://raw.githubusercontent.com/Demosthen/TA-L/app/src/main/res/mipmap-xxhdpi/bike.png)
-
+![image](https://user-images.githubusercontent.com/55931451/70091190-73e52780-15d0-11ea-8351-e49bc6eb5b25.png)
